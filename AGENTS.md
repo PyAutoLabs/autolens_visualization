@@ -8,6 +8,16 @@ a collection of standalone producer scripts, **not** an installable package — 
 `pyproject.toml`. These are the canonical, agent-agnostic instructions for this repo; the
 `README.md` is the human-facing overview and `GALLERY.md` is the browsable gallery.
 
+## Layering: project repo vs organ
+
+This is a **project repo** (category `project`, like `autolens_profiling` and
+`autolens_inference`): it makes, stores and tracks the lens figures — producers, simulators,
+datasets, `plots.yaml`, instruments, tracked PNGs, `GALLERY.md`, the render harness. The organ
+**PyAutoEyes** is the cross-project visualization dashboard over the `<lib>_visualization`
+project repos: it reads this repo's tracked `gallery/viz_manifest.yaml` and links to the PNGs
+here; it renders nothing and copies no figures. Judging figures is the Brain's Eyes conductor;
+figure changes land here (producer / config) or in the libraries (plot API), never in the organ.
+
 ## Repository Structure
 
 Producers are laid out **flat, one per domain** (`scripts/<domain>/visualization*.py`), because
@@ -22,7 +32,8 @@ scripts/
   interferometer/images/visualization/
   misc/simulators/                  imaging.py + interferometer.py (regenerate datasets)
   misc/test/                        hermetic pytest for the gallery builder
-gallery/gallery_build.py            GALLERY.md + output/gallery/{gallery.html,viz_manifest.yaml}
+gallery/gallery_build.py            GALLERY.md + gallery/viz_manifest.yaml + output/gallery/
+gallery/viz_manifest.yaml           TRACKED, generated figure manifest (PyAutoEyes read contract)
 gallery/gallery_run.sh              run producers -> build -> --check
 config/general.yaml                 layered over the library config (version check off)
 config/visualize/plots.yaml         the library default with EVERY toggle on
@@ -33,7 +44,8 @@ _viz_cli.py                         repo-root finder, dataset paths, auto-simula
 GALLERY.md                          TRACKED, generated — never edit by hand
 ```
 
-**What is tracked.** PNG figures under `scripts/<domain>/images/**` and `GALLERY.md`. The FITS /
+**What is tracked.** PNG figures under `scripts/<domain>/images/**`, `GALLERY.md` and
+`gallery/viz_manifest.yaml`. The FITS /
 CSV / JSON data products the visualizers also write are gitignored (bulky, not viewable on
 GitHub), as are `output/` and `dataset/**/lensed_source.fits`.
 
@@ -48,12 +60,22 @@ From the repo root, with the library checkouts on `PYTHONPATH` (`source activate
 ```bash
 bash gallery/gallery_run.sh --all        # both producers, then build + --check (~3 min)
 python scripts/imaging/visualization.py  # one producer (~75 s)
-python gallery/gallery_build.py          # rebuild GALLERY.md + output/gallery/ only
-python gallery/gallery_build.py --check  # fail if GALLERY.md is stale vs the PNGs on disk
+python gallery/gallery_build.py          # rebuild GALLERY.md + gallery/viz_manifest.yaml + output/gallery/
+python gallery/gallery_build.py --check  # fail if GALLERY.md or the manifest is stale vs the PNGs on disk
 ```
 
 Each producer wipes its own `scripts/<domain>/images/visualization/` tree first, so the committed
-PNG set is exactly what the last run produced. Commit the PNGs and `GALLERY.md` together.
+PNG set is exactly what the last run produced. Commit the PNGs, `GALLERY.md` and
+`gallery/viz_manifest.yaml` together.
+
+**The tracked manifest** (`gallery/viz_manifest.yaml`, schema 1) lists every committed PNG as
+`{file, producer, domain, source, bytes, sha256}` (`source` = the per-source sub-folder,
+`parametric` / `delaunay`, or `""` for the before-fit figures), plus `rendered_with:` (the
+autolens / autogalaxy / autoarray / autofit versions) and `generated:` (the date the figures or
+stack last changed — carried over on an unchanged rebuild, so re-running is a git no-op). There
+are no mtimes: it is reproducible from a checkout. `--check` ignores only `generated:` and
+`rendered_with:`; any added, removed or byte-changed PNG fails it. It is the read contract of the
+PyAutoEyes dashboard — change its shape only together with the organ.
 
 Each producer pushes `config/` via `conf.instance.push` (the all-true `plots.yaml`), loads its
 tracked dataset, builds the simulator's **true model** (every parameter fixed), and calls
@@ -82,7 +104,8 @@ in `_viz_cli.py` only fires when `data.fits` is absent — it never deletes a tr
    dataset under `dataset/<domain>/<instrument>/`.
 2. Add a flat producer `scripts/<domain>/visualization.py` modelled on the imaging one, writing
    to `scripts/<domain>/images/visualization/`.
-3. Run `bash gallery/gallery_run.sh --all` and commit the PNGs + `GALLERY.md`.
+3. Run `bash gallery/gallery_run.sh --all` and commit the PNGs + `GALLERY.md` +
+   `gallery/viz_manifest.yaml`.
 
 ## Improving a figure (edit surfaces)
 
@@ -92,14 +115,21 @@ in `_viz_cli.py` only fires when `data.fits` is absent — it never deletes a tr
   the normal library workflow, then this repo is re-rendered).
 - **script** — the producer in `scripts/<domain>/visualization.py` (dataset, model, source types).
 
-## Eyes agent contract
+## Eyes contracts
 
-The Brain Eyes agent (`organs/PyAutoBrain/agents/conductors/eyes/`) reviews this repo:
-`bin/pyauto-brain eyes survey lens/autolens_visualization`. It expects flat
-`scripts/<domain>/visualization*.py` producers writing `scripts/<domain>/images/<stem>/**`, a
-`gallery/gallery_run.sh` harness, and `output/gallery/{gallery.html,viz_manifest.yaml}`
-(`{domain: {script: [{file, kind, group}]}}`). Keep that layout when adding domains; accepted
-critiques route through intake / start_dev like any other change.
+Two readers depend on this repo's layout:
+
+- **The Brain Eyes conductor** (`organs/PyAutoBrain/agents/conductors/eyes/`) reviews it:
+  `bin/pyauto-brain eyes survey lens/autolens_visualization`. It expects flat
+  `scripts/<domain>/visualization*.py` producers writing `scripts/<domain>/images/<stem>/**`, a
+  `gallery/gallery_run.sh` harness, and `output/gallery/{gallery.html,viz_manifest.yaml}` (the
+  latter a gitignored copy of the tracked manifest). Accepted critiques route through intake /
+  start_dev like any other change.
+- **The PyAutoEyes dashboard** reads the tracked `gallery/viz_manifest.yaml` and links to the
+  PNGs; `render.yml` fires `repository_dispatch: eyes-refresh` at PyAutoLabs/PyAutoEyes after
+  each release re-render.
+
+Keep that layout when adding domains.
 
 ## Testing
 
@@ -115,7 +145,9 @@ pytest scripts/misc/test -q
 plus `lychee` on every `*.md`, then both producers run for real followed by
 `gallery_build.py --check` (a PR that changes the figure set without regenerating `GALLERY.md`
 fails). `render.yml` (manual + `repository_dispatch: pyautolens-release`) re-renders with the
-released PyPI stack and commits PNGs + `GALLERY.md` back as `github-actions[bot]` `[skip ci]`.
+released PyPI stack, commits PNGs + `GALLERY.md` + `gallery/viz_manifest.yaml` back as
+`github-actions[bot]` `[skip ci]`, then dispatches `eyes-refresh` to PyAutoEyes (token:
+`secrets.PAT_PYAUTOLABS`; the step warns and skips when the secret is unavailable).
 
 ## Sandboxed / restricted runs
 
@@ -136,12 +168,14 @@ When editing the same region across many scripts in one pass, only rewrite the t
 - `../autolens_workspace_test` — visualization *tests* (file/HDU assertions) and the gallery
   harness this repo's was adapted from.
 - `../autolens_profiling` — source of the instrument presets, simulators and HST dataset.
+- `../../organs/PyAutoEyes` — the organ: cross-project visualization dashboard that aggregates
+  this repo via `gallery/viz_manifest.yaml` (links to the PNGs, never copies them).
 
 ## Task Workflows
 
 When changing a producer, the config or a dataset, re-render (`gallery/gallery_run.sh --all`),
-keep `ruff check .` / `ruff format --check .` clean, and commit the PNGs + `GALLERY.md` in the same
-PR. Do not commit machine-specific absolute paths.
+keep `ruff check .` / `ruff format --check .` clean, and commit the PNGs + `GALLERY.md` +
+`gallery/viz_manifest.yaml` in the same PR. Do not commit machine-specific absolute paths.
 
 <!-- repos_sync:history:begin -->
 ## Never rewrite history

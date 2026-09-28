@@ -1,8 +1,11 @@
 # render.yml — manual + on-PyAutoLens-release figure refresh.
 #
 # Installs the RELEASED stack from PyPI (what users get), runs every producer via
-# `gallery/gallery_run.sh --all`, rebuilds GALLERY.md, and commits the refreshed
-# PNGs + GALLERY.md back to main as `github-actions[bot]` with `[skip ci]`.
+# `gallery/gallery_run.sh --all`, rebuilds GALLERY.md and the tracked figure
+# manifest `gallery/viz_manifest.yaml`, commits the refreshed PNGs + GALLERY.md +
+# manifest back to main as `github-actions[bot]` with `[skip ci]`, and then fires a
+# `repository_dispatch` (`eyes-refresh`) at PyAutoLabs/PyAutoEyes so the organ's
+# cross-project dashboard re-reads the manifest.
 #
 # Triggers:
 #   - workflow_dispatch (manual, GitHub UI)
@@ -11,7 +14,10 @@
 #
 # Adapted from autolens_profiling/.github/workflows/profile.yml. `[skip ci]` keeps
 # lint.yml from re-running on the bot commit (it would loop); `contents: write`
-# lets the bot push.
+# lets the bot push. The PyAutoEyes dispatch needs a cross-repo token: it uses
+# `secrets.PAT_PYAUTOLABS` (the org PAT the Hands release pipeline uses), which must
+# be granted to this repo and must cover PyAutoLabs/PyAutoEyes; without it the step
+# warns and skips rather than failing the render.
 
 name: render
 
@@ -58,14 +64,14 @@ jobs:
           fi
           python -c "import autolens; print('autolens', autolens.__version__)"
 
-      - name: Render figures + rebuild GALLERY.md
+      - name: Render figures + rebuild GALLERY.md + gallery/viz_manifest.yaml
         run: bash gallery/gallery_run.sh --all
 
-      - name: Commit and push refreshed figures + GALLERY.md
+      - name: Commit and push refreshed figures + GALLERY.md + manifest
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A scripts/*/images GALLERY.md
+          git add -A scripts/*/images GALLERY.md gallery/viz_manifest.yaml
           if git diff --cached --quiet; then
             echo "No changes — exiting clean."
             exit 0
@@ -75,3 +81,19 @@ jobs:
 
           Triggered by ${{ github.event_name }} (run ${{ github.run_id }})."
           git push origin HEAD:main
+
+      - name: Tell the PyAutoEyes dashboard to refresh (repository_dispatch eyes-refresh)
+        env:
+          GH_TOKEN: ${{ secrets.PAT_PYAUTOLABS }}
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::warning::PAT_PYAUTOLABS is not available to this repo — skipping the eyes-refresh dispatch to PyAutoLabs/PyAutoEyes."
+            exit 0
+          fi
+          sha=$(git rev-parse HEAD)
+          gh api repos/PyAutoLabs/PyAutoEyes/dispatches \
+            -f event_type=eyes-refresh \
+            -f "client_payload[repo]=${{ github.repository }}" \
+            -f "client_payload[sha]=${sha}" \
+            -f "client_payload[manifest]=gallery/viz_manifest.yaml"
+          echo "Dispatched eyes-refresh to PyAutoLabs/PyAutoEyes (${{ github.repository }}@${sha})."

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Gallery runner: regenerate the visualization figures, then build GALLERY.md +
-# the Eyes-contract contact sheet / manifest (gallery/gallery_build.py), then
+# the tracked gallery/viz_manifest.yaml + the Eyes-contract contact sheet
+# (gallery/gallery_build.py), then
 # verify with --check.
 #
 # Runs every flat producer scripts/<domain>/visualization*.py from the repo root

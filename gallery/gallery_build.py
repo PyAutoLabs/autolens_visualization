@@ -9,33 +9,50 @@ producers have written under ``scripts/<domain>/images/<script>/**``:
                                         (relative image links; domain -> script ->
                                         group -> figure; table of contents; header
                                         with the PyAutoLens version + figure count)
+    gallery/viz_manifest.yaml         — TRACKED figure manifest: the read contract
+                                        of the PyAutoEyes dashboard (see below)
     output/gallery/gallery.html       — contact sheet (gitignored), Eyes-agent contract
-    output/gallery/viz_manifest.yaml  — {domain: {script: [{file, kind, group}]}}
-                                        (gitignored), Eyes-agent contract
+    output/gallery/viz_manifest.yaml  — gitignored copy of the tracked manifest, where
+                                        the Brain's Eyes conductor looks for it
+
+The tracked manifest lists every committed PNG figure with its producer script,
+domain, source type (the per-source sub-folder, e.g. ``parametric`` / ``delaunay``;
+"" for the top-level figures), repo-relative path, byte size and sha256 content hash
+(no mtimes, so it is reproducible from a checkout), plus the stack it was rendered
+with (``rendered_with:`` — autolens / autogalaxy / autoarray / autofit versions) and
+the date it last changed (``generated:``). The organ PyAutoEyes reads it to link to
+this repo's PNGs; it copies nothing. ``generated:`` and ``rendered_with:`` are carried
+over unchanged when a rebuild finds the same figures rendered with the same stack, so
+rebuilding an unchanged tree is a no-op for git.
 
 Adapted from ``autolens_workspace_test/gallery/gallery_build.py``; the GALLERY.md
-writer and its staleness check are new here.
+writer, the tracked manifest and their staleness checks are new here.
 
 Usage (from the repo root):
 
-    python gallery/gallery_build.py           # build all three
+    python gallery/gallery_build.py           # build everything
     python gallery/gallery_build.py --check   # rebuild output/gallery/, then FAIL if
-                                              # the committed GALLERY.md differs from
-                                              # what would be regenerated, or any
-                                              # manifest entry does not resolve
+                                              # the committed GALLERY.md or
+                                              # gallery/viz_manifest.yaml differs from
+                                              # what would be regenerated (figure set,
+                                              # sizes or content hashes)
     python gallery/gallery_build.py --embed   # also write a self-contained
                                               # output/gallery/gallery_embedded.html
 
-``--check`` never rewrites GALLERY.md. It compares everything except the version
-header line (``Rendered with PyAutoLens ...``), so a PR built against library mains
-is not failed by the version string the released-stack render workflow stamped; the
-figure set, grouping and links must match exactly. There is no timestamp anywhere.
+``--check`` never rewrites GALLERY.md or the tracked manifest. For GALLERY.md it
+compares everything except the version header line (``Rendered with PyAutoLens ...``);
+for the manifest everything except ``generated:`` and ``rendered_with:``. So a PR built
+against library mains is not failed by the version string the released-stack render
+workflow stamped, while the figure set, grouping, links, sizes and content hashes must
+match exactly.
 """
 
 from __future__ import annotations
 
 import argparse
 import base64
+import datetime
+import hashlib
 import html
 import re
 import sys
@@ -47,6 +64,14 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 GALLERY_MD = "GALLERY.md"
 VERSION_LINE_PREFIX = "Rendered with PyAutoLens"
+
+# The tracked figure manifest (PyAutoEyes' read contract) and its gitignored copy.
+TRACKED_MANIFEST = Path("gallery") / "viz_manifest.yaml"
+OUTPUT_MANIFEST = Path("output") / "gallery" / "viz_manifest.yaml"
+MANIFEST_SCHEMA = 1
+STACK = ("autolens", "autogalaxy", "autoarray", "autofit")
+# Header fields a --check ignores (they change with the stack, not the figures).
+VOLATILE_KEYS = ("generated", "rendered_with")
 
 CSS = """
 body { font-family: sans-serif; margin: 1.5rem; background: #111; color: #ddd; }
@@ -187,6 +212,94 @@ def render_markdown(manifest: dict, version: str) -> str:
     return "\n".join(lines + body) + "\n"
 
 
+def stack_versions(autolens_override: str | None = None) -> dict:
+    """``{package: __version__}`` for the rendering stack; "unknown" when a package
+    does not import (a missing stack must not block a --check)."""
+    versions = {}
+    for name in STACK:
+        if name == "autolens" and autolens_override:
+            versions[name] = autolens_override
+            continue
+        try:
+            versions[name] = str(__import__(name).__version__)
+        except Exception:  # noqa: BLE001
+            versions[name] = "unknown"
+    return versions
+
+
+def figure_entries(manifest: dict, root: Path = REPO_ROOT) -> list[dict]:
+    """One mtime-free record per PNG figure, in scan order."""
+    figures = []
+    for domain, scripts in manifest.items():
+        for script, entries in scripts.items():
+            for e in _pngs(entries):
+                data = (root / e["file"]).read_bytes()
+                figures.append(
+                    {
+                        "file": e["file"],
+                        "producer": f"scripts/{domain}/{script}.py",
+                        "domain": domain,
+                        "source": e["group"],
+                        "bytes": len(data),
+                        "sha256": hashlib.sha256(data).hexdigest(),
+                    }
+                )
+    return figures
+
+
+def build_figure_manifest(
+    manifest: dict,
+    rendered_with: dict,
+    previous: dict | None = None,
+    root: Path = REPO_ROOT,
+    today: str | None = None,
+) -> dict:
+    """The tracked ``gallery/viz_manifest.yaml`` document.
+
+    ``generated`` / ``rendered_with`` are kept from ``previous`` when the figures and
+    the stack are unchanged, so an idempotent rebuild writes identical bytes."""
+    figures = figure_entries(manifest, root)
+    if (
+        previous
+        and previous.get("figures") == figures
+        and previous.get("rendered_with") == rendered_with
+        and previous.get("generated")
+    ):
+        generated = previous["generated"]
+    else:
+        generated = today or datetime.date.today().isoformat()
+    return {
+        "schema": MANIFEST_SCHEMA,
+        "generated": str(generated),
+        "rendered_with": rendered_with,
+        "figure_count": len(figures),
+        "figures": figures,
+    }
+
+
+def dump_manifest(doc: dict) -> str:
+    return (
+        "# Generated by gallery/gallery_build.py — the tracked figure manifest read by\n"
+        "# the PyAutoEyes dashboard. Do not edit by hand: rerun\n"
+        "# `bash gallery/gallery_run.sh --all` (or `python gallery/gallery_build.py`).\n"
+        + yaml.safe_dump(doc, sort_keys=False)
+    )
+
+
+def load_manifest(path: Path) -> dict | None:
+    if not path.is_file():
+        return None
+    try:
+        doc = yaml.safe_load(path.read_text())
+    except yaml.YAMLError:
+        return None
+    return doc if isinstance(doc, dict) else None
+
+
+def _strip_volatile(doc: dict) -> dict:
+    return {k: v for k, v in doc.items() if k not in VOLATILE_KEYS}
+
+
 def _normalise_version_line(text: str) -> str:
     return "\n".join(
         f"{VERSION_LINE_PREFIX} <version>" + line.split("`", 2)[-1]
@@ -207,7 +320,8 @@ def autolens_version() -> str:
 
 def check(manifest: dict, root: Path = REPO_ROOT) -> list[str]:
     """Problems: unresolvable manifest entries, on-disk images missing from the
-    manifest, and a committed GALLERY.md that differs from a regeneration."""
+    manifest, and a committed GALLERY.md or tracked gallery/viz_manifest.yaml that
+    differs from a regeneration."""
     problems = []
     listed = set()
     for scripts in manifest.values():
@@ -234,6 +348,39 @@ def check(manifest: dict, root: Path = REPO_ROOT) -> list[str]:
                 f"{GALLERY_MD} is stale (figure set changed) — rerun "
                 "python gallery/gallery_build.py and commit it"
             )
+
+    tracked = load_manifest(root / TRACKED_MANIFEST)
+    if tracked is None:
+        problems.append(
+            f"{TRACKED_MANIFEST.as_posix()} missing or unreadable — run "
+            "python gallery/gallery_build.py and commit it"
+        )
+    else:
+        expected_doc = build_figure_manifest(manifest, rendered_with={}, root=root)
+        if _strip_volatile(tracked) != _strip_volatile(expected_doc):
+            listed_files = {f.get("file") for f in tracked.get("figures") or []}
+            actual = {f["file"]: f for f in expected_doc["figures"]}
+            tracked_by_file = {f.get("file"): f for f in tracked.get("figures") or []}
+            detail = sorted(
+                [f"added {f}" for f in actual.keys() - listed_files]
+                + [f"removed {f}" for f in listed_files - actual.keys()]
+                + [
+                    f"changed {f}"
+                    for f in actual.keys() & listed_files
+                    if tracked_by_file[f] != actual[f]
+                ]
+            )
+            problems.append(
+                f"{TRACKED_MANIFEST.as_posix()} is stale vs the images on disk"
+                + (
+                    f" ({len(detail)}: {', '.join(detail[:5])}"
+                    + (", ..." if len(detail) > 5 else "")
+                    + ")"
+                    if detail
+                    else ""
+                )
+                + " — rerun python gallery/gallery_build.py and commit it"
+            )
     return problems
 
 
@@ -259,14 +406,28 @@ def main(argv=None) -> int:
 
     gallery_path = root / "output" / "gallery"
     gallery_path.mkdir(parents=True, exist_ok=True)
-    (gallery_path / "viz_manifest.yaml").write_text(yaml.safe_dump(manifest, sort_keys=True))
     (gallery_path / "gallery.html").write_text(render_html(manifest, root))
     if args.embed:
         (gallery_path / "gallery_embedded.html").write_text(render_html(manifest, root, embed=True))
 
-    if not args.check:
+    tracked_path = root / TRACKED_MANIFEST
+    if args.check:
+        # The gitignored copy mirrors whatever is tracked; --check never rewrites it.
+        tracked_text = tracked_path.read_text() if tracked_path.is_file() else None
+    else:
         version = args.version_string or autolens_version()
         (root / GALLERY_MD).write_text(render_markdown(manifest, version))
+        doc = build_figure_manifest(
+            manifest,
+            rendered_with=stack_versions(args.version_string),
+            previous=load_manifest(tracked_path),
+            root=root,
+        )
+        tracked_text = dump_manifest(doc)
+        tracked_path.parent.mkdir(parents=True, exist_ok=True)
+        tracked_path.write_text(tracked_text)
+    if tracked_text is not None:
+        (root / OUTPUT_MANIFEST).write_text(tracked_text)
 
     for domain, scripts in manifest.items():
         for script, entries in scripts.items():
@@ -274,7 +435,7 @@ def main(argv=None) -> int:
             n_fits = sum(1 for e in entries if e["kind"] == "fits")
             print(f"{domain}/{script}: {n_png} png, {n_fits} fits")
     print(f"\nGallery:  {gallery_path / 'gallery.html'}")
-    print(f"Manifest: {gallery_path / 'viz_manifest.yaml'}")
+    print(f"Manifest: {tracked_path} (copy: {root / OUTPUT_MANIFEST})")
     if not args.check:
         print(f"Markdown: {root / GALLERY_MD}")
 
@@ -285,7 +446,10 @@ def main(argv=None) -> int:
             for p in problems:
                 print(f"  {p}")
             return 1
-        print("check: manifest resolves on disk and GALLERY.md is current.")
+        print(
+            "check: images resolve on disk; GALLERY.md and "
+            f"{TRACKED_MANIFEST.as_posix()} are current."
+        )
     return 0
 
 

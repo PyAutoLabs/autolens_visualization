@@ -2,9 +2,10 @@
 
 A fabricated ``scripts/alpha/images/visualization/{a.png, sub/b.png}`` tree in a tmp
 dir stands in for real producer output. No PyAutoLens import (the version header is
-passed explicitly), no real figures: the point is the manifest shape, the relative
-links in GALLERY.md, and that ``--check`` catches a figure set that drifted from the
-committed GALLERY.md.
+passed explicitly and ``stack_versions`` is stubbed), no real figures: the point is
+the tracked ``gallery/viz_manifest.yaml`` shape, the relative links in GALLERY.md, and
+that ``--check`` catches a figure set or figure content that drifted from the
+committed GALLERY.md / manifest.
 
 The module is loaded straight off its path (``gallery/`` is not a package).
 
@@ -16,6 +17,7 @@ Run::
 
 from __future__ import annotations
 
+import hashlib
 import importlib.util
 import sys as _sys
 from pathlib import Path as _Path
@@ -54,26 +56,108 @@ def _build(root, *extra):
     return gb.main(["--root", str(root), "--version-string", "9.9.9", *extra])
 
 
-def test_manifest_content(tree):
+FAKE_STACK = {"autolens": "9.9.9", "autogalaxy": "1.0", "autoarray": "1.0", "autofit": "1.0"}
+
+
+@pytest.fixture(autouse=True)
+def _no_stack_import(monkeypatch):
+    """Keep the tests hermetic: never import the PyAuto stack for ``rendered_with``."""
+    monkeypatch.setattr(
+        gb, "stack_versions", lambda override=None: {**FAKE_STACK, "autolens": override or "9.9.9"}
+    )
+
+
+def _sha(data: bytes) -> str:
+    return hashlib.sha256(data).hexdigest()
+
+
+def test_tracked_manifest_content(tree):
     assert _build(tree) == 0
-    manifest = yaml.safe_load((tree / "output" / "gallery" / "viz_manifest.yaml").read_text())
-    assert manifest == {
-        "alpha": {
-            "visualization": [
-                {
-                    "file": "scripts/alpha/images/visualization/a.png",
-                    "kind": "png",
-                    "group": "",
-                },
-                {
-                    "file": "scripts/alpha/images/visualization/sub/b.png",
-                    "kind": "png",
-                    "group": "sub",
-                },
-            ]
-        }
-    }
+    doc = yaml.safe_load((tree / "gallery" / "viz_manifest.yaml").read_text())
+    assert doc["schema"] == 1
+    assert doc["rendered_with"] == FAKE_STACK
+    assert doc["generated"]
+    assert doc["figure_count"] == 2
+    assert doc["figures"] == [
+        {
+            "file": "scripts/alpha/images/visualization/a.png",
+            "producer": "scripts/alpha/visualization.py",
+            "domain": "alpha",
+            "source": "",
+            "bytes": len(PNG_BYTES),
+            "sha256": _sha(PNG_BYTES),
+        },
+        {
+            "file": "scripts/alpha/images/visualization/sub/b.png",
+            "producer": "scripts/alpha/visualization.py",
+            "domain": "alpha",
+            "source": "sub",
+            "bytes": len(PNG_BYTES),
+            "sha256": _sha(PNG_BYTES),
+        },
+    ]
+    # The gitignored copy the Eyes conductor looks for is byte-identical.
+    assert (tree / "output" / "gallery" / "viz_manifest.yaml").read_text() == (
+        tree / "gallery" / "viz_manifest.yaml"
+    ).read_text()
     assert (tree / "output" / "gallery" / "gallery.html").is_file()
+
+
+def test_manifest_lists_png_figures_only(tree):
+    (tree / "scripts" / "alpha" / "images" / "visualization" / "data.fits").write_bytes(b"x")
+    assert _build(tree) == 0
+    doc = yaml.safe_load((tree / "gallery" / "viz_manifest.yaml").read_text())
+    assert [f["file"].rsplit(".", 1)[-1] for f in doc["figures"]] == ["png", "png"]
+
+
+def test_rebuild_of_unchanged_tree_is_byte_identical(tree):
+    assert _build(tree) == 0
+    path = tree / "gallery" / "viz_manifest.yaml"
+    doc = yaml.safe_load(path.read_text())
+    doc["generated"] = "2000-01-01"
+    path.write_text(gb.dump_manifest(doc))
+    before = path.read_text()
+    assert _build(tree) == 0
+    # Same figures + same stack: the old date is carried over, nothing to commit.
+    assert path.read_text() == before
+
+
+def test_new_stack_version_restamps_manifest(tree):
+    assert _build(tree) == 0
+    path = tree / "gallery" / "viz_manifest.yaml"
+    doc = yaml.safe_load(path.read_text())
+    doc["generated"] = "2000-01-01"
+    path.write_text(gb.dump_manifest(doc))
+    assert gb.main(["--root", str(tree), "--version-string", "10.0.0"]) == 0
+    doc = yaml.safe_load(path.read_text())
+    assert doc["rendered_with"]["autolens"] == "10.0.0"
+    assert doc["generated"] != "2000-01-01"
+
+
+def test_check_fails_on_changed_png_bytes(tree):
+    assert _build(tree) == 0
+    # Same figure set (GALLERY.md still current), different content: stale manifest.
+    (tree / "scripts" / "alpha" / "images" / "visualization" / "a.png").write_bytes(
+        PNG_BYTES + b"changed"
+    )
+    assert _build(tree, "--check") == 1
+    assert _build(tree) == 0
+    assert _build(tree, "--check") == 0
+
+
+def test_check_fails_without_tracked_manifest(tree):
+    assert _build(tree) == 0
+    (tree / "gallery" / "viz_manifest.yaml").unlink()
+    assert _build(tree, "--check") == 1
+
+
+def test_check_never_rewrites_tracked_manifest(tree):
+    assert _build(tree) == 0
+    path = tree / "gallery" / "viz_manifest.yaml"
+    before = path.read_text()
+    (tree / "scripts" / "alpha" / "images" / "visualization" / "c.png").write_bytes(PNG_BYTES)
+    _build(tree, "--check")
+    assert path.read_text() == before
 
 
 def test_gallery_md_links_and_header(tree):

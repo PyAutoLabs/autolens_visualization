@@ -2,7 +2,17 @@
 
 **[Browse the gallery → GALLERY.md](GALLERY.md)**
 
-The permanent, rendered gallery of every figure PyAutoLens writes during a model-fit.
+The permanent, rendered gallery of every figure PyAutoLens writes during a model-fit — the
+**lens visualization project repo** of the PyAutoLabs organism.
+
+This repo owns the lens figures: the producer scripts, the simulators and datasets, the
+all-on [`plots.yaml`](config/visualize/plots.yaml), the instrument presets, the tracked PNGs,
+[`GALLERY.md`](GALLERY.md) and the render harness. The organ
+[PyAutoEyes](https://github.com/PyAutoLabs/PyAutoEyes) is the cross-project visualization
+dashboard: it reads this repo's tracked figure manifest
+([`gallery/viz_manifest.yaml`](gallery/viz_manifest.yaml)) and links to the PNGs here — it never
+renders or copies them. Other libraries get sibling `<lib>_visualization` project repos in the
+same shape.
 
 ## Vision
 
@@ -22,13 +32,15 @@ a Delaunay pixelized source, with every toggle in
 
 ```bash
 source activate.sh                  # library checkouts on PYTHONPATH (see the file)
-bash gallery/gallery_run.sh --all   # run both producers, rebuild GALLERY.md, --check
+bash gallery/gallery_run.sh --all   # run both producers, rebuild GALLERY.md + manifest, --check
 ```
 
 Or one domain: `python scripts/imaging/visualization.py`, then `python gallery/gallery_build.py`.
-Commit the regenerated PNGs under `scripts/<domain>/images/` together with `GALLERY.md`.
-On every PyAutoLens release, [`render.yml`](.github/workflows/render.yml) re-renders with the
-released stack and commits the result.
+Commit the regenerated PNGs under `scripts/<domain>/images/` together with `GALLERY.md` and
+`gallery/viz_manifest.yaml` (every figure's producer, domain, source type, path, byte size and
+sha256, plus the stack versions it was rendered with). On every PyAutoLens release,
+[`render.yml`](.github/workflows/render.yml) re-renders with the released stack, commits the
+result and pings PyAutoEyes (`repository_dispatch: eyes-refresh`) to refresh its dashboard.
 
 ## Add a domain
 
@@ -36,7 +48,8 @@ released stack and commits the result.
   under `dataset/<domain>/<instrument>/`.
 - Add a flat producer `scripts/<domain>/visualization.py` modelled on
   [`scripts/imaging/visualization.py`](scripts/imaging/visualization.py).
-- Run `bash gallery/gallery_run.sh --all` and commit the PNGs + `GALLERY.md`.
+- Run `bash gallery/gallery_run.sh --all` and commit the PNGs + `GALLERY.md` +
+  `gallery/viz_manifest.yaml`.
 
 ## Improve a figure
 
@@ -54,6 +67,9 @@ The Brain Eyes agent runs the review loop on this repo:
 
 ## Related repos
 
+- [PyAutoEyes](https://github.com/PyAutoLabs/PyAutoEyes) — the organ: the cross-project
+  visualization dashboard that aggregates this repo (reads `gallery/viz_manifest.yaml`, links to
+  the PNGs here).
 - [autolens_workspace](https://github.com/PyAutoLabs/autolens_workspace) — user-facing science
   scripts and tutorials.
 - [autolens_workspace_test](https://github.com/PyAutoLabs/autolens_workspace_test) — visualization

@@ -77,7 +77,12 @@ The Brain Eyes agent runs the review loop on this repo:
 - [autolens_profiling](https://github.com/PyAutoLabs/autolens_profiling) — likelihood timing; the
   source of this repo's instrument presets, simulators and HST dataset.
 
-## Community & support
+## Community & Contributing
 
-- **Slack** — [PyAutoLens workspace](https://join.slack.com/t/pyautolens/shared_invite/zt-2cufp4eyf-fXfgMxRGuvg~bMrI3uOAxg) for questions.
-- **Issues** — file figure bugs and visualization requests on this repo's [issue tracker](https://github.com/PyAutoLabs/autolens_visualization/issues).
+**PyAutoLens** is built in the open by its users: everyone is welcome to ask questions,
+share what they have made with it, and contribute.
+
+Questions, ideas and bug reports: the [PyAutoLabs Discussions](https://github.com/orgs/PyAutoLabs/discussions).
+Chat with us on [Slack](https://join.slack.com/t/pyautolens/shared_invite/zt-2cufp4eyf-fXfgMxRGuvg~bMrI3uOAxg).
+
+Community-built tools and tutorials, and how to contribute: the [**PyAutoLens** community page](https://pyautolens.readthedocs.io/en/latest/general/community.html).

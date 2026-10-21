@@ -81,9 +81,7 @@ def simulate(output_root: Path | None = None) -> Path:
 
     al.output_to_json(obj=tracer, file_path=dataset_path / "tracer.json")
 
-    grid = al.Grid2D.uniform(
-        shape_native=tm.IMAGE_SHAPE_NATIVE, pixel_scales=tm.IMAGE_PIXEL_SCALES
-    )
+    grid = al.Grid2D.uniform(shape_native=tm.IMAGE_SHAPE_NATIVE, pixel_scales=tm.IMAGE_PIXEL_SCALES)
     psf = al.Convolver.from_gaussian(
         shape_native=(11, 11),
         sigma=tm.IMAGE_PIXEL_SCALES,
@@ -98,7 +96,7 @@ def simulate(output_root: Path | None = None) -> Path:
     )
     imaging = simulator.via_tracer_from(tracer=tracer, grid=grid)
     aplt.fits_imaging(dataset=imaging, data_path=dataset_path / "data.fits", overwrite=True)
-    print(f"  data.fits: {tm.IMAGE_SHAPE_NATIVE} @ {tm.IMAGE_PIXEL_SCALES}\"/px")
+    print(f'  data.fits: {tm.IMAGE_SHAPE_NATIVE} @ {tm.IMAGE_PIXEL_SCALES}"/px')
     print(f"  wrote {dataset_path}")
     return dataset_path
 

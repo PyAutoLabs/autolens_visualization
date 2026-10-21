@@ -374,8 +374,8 @@ figures:
   producer: scripts/point_source_image_chi_squared/visualization.py
   domain: point_source_image_chi_squared
   source: ''
-  bytes: 78338
-  sha256: 76b4b2b2ce69bcc2f3d3740c901d04d86ba245f217e5f026f1bbdfc3b9db39bd
+  bytes: 90241
+  sha256: 598066fe921e3100582c8d3007a1fdf8ee54665c73a953b932fa2aed0d0bd986
 - file: scripts/point_source_image_chi_squared/images/visualization/image_with_points.png
   producer: scripts/point_source_image_chi_squared/visualization.py
   domain: point_source_image_chi_squared
@@ -398,8 +398,8 @@ figures:
   producer: scripts/point_source_source_chi_squared/visualization.py
   domain: point_source_source_chi_squared
   source: ''
-  bytes: 75775
-  sha256: 4fee595525a08c3f70f79c7d5e4395b69734c3582d3ddd4343b64a5c210a4f23
+  bytes: 87781
+  sha256: c2ff686539ea88d8b5d07d15d8e8cc77e4ee64646333ed6f20cbcd5785f41717
 - file: scripts/point_source_source_chi_squared/images/visualization/image_with_points.png
   producer: scripts/point_source_source_chi_squared/visualization.py
   domain: point_source_source_chi_squared

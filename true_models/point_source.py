@@ -9,6 +9,8 @@ DATASET_NAME = "simple"
 POINT_NAME = "point_0"
 POSITION_NOISE = 0.005  # arcsec, HST-like point-source astrometry
 SOURCE_CENTRE = (0.07, 0.07)
+SOURCE_FLUX = 1.0  # each image of data.fits has flux SOURCE_FLUX x |magnification|
+IMAGE_PIXEL_SCALES = 0.05  # arcsec / pixel of data.fits
 
 
 def lens():

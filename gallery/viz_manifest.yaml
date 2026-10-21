@@ -26,8 +26,8 @@ figures:
   producer: scripts/cluster/visualization.py
   domain: cluster
   source: point_0
-  bytes: 645607
-  sha256: b147bf1f53a59be04a6e6cc1de68e34c911946064dcd620f642122e044c6b547
+  bytes: 646052
+  sha256: b0f21b073ab19c91c629504940ecd8fb631dda85107edabfd6345c60e7fbc1b4
 - file: scripts/cluster/images/visualization/point_1/dataset.png
   producer: scripts/cluster/visualization.py
   domain: cluster
@@ -44,8 +44,8 @@ figures:
   producer: scripts/cluster/visualization.py
   domain: cluster
   source: point_1
-  bytes: 631862
-  sha256: 98eb7d268feaf5b4d5f342f41580e808b2950c13305dedfae0dd8c8d1b368af3
+  bytes: 631672
+  sha256: 357d5dff2da880f3bd0908dba09624d2ee66d4211548f27dd79807452b153299
 - file: scripts/group/images/visualization/dataset.png
   producer: scripts/group/visualization.py
   domain: group
@@ -398,14 +398,14 @@ figures:
   producer: scripts/point_source_image_chi_squared/visualization.py
   domain: point_source_image_chi_squared
   source: ''
-  bytes: 809943
-  sha256: 2b8bb9525598f73fc8b83389dfabf81fd3f3242f7bb9231a8a4a17303875cfd0
+  bytes: 809716
+  sha256: 92252350649f9d7a8698a775afcbf02cc0bc0291f842b5365f7ecea0fb4ec25a
 - file: scripts/point_source_image_chi_squared/images/visualization/teaching/point_solver.png
   producer: scripts/point_source_image_chi_squared/visualization.py
   domain: point_source_image_chi_squared
   source: teaching
-  bytes: 494970
-  sha256: fb7d5235200e45e2eb3e6a33034b4120bae3b2648f33ced51315ac4b4b01fc0b
+  bytes: 495158
+  sha256: 84f0312c1415db43b8d8b901a2977a24d706697df70523aef122744a7e00a451
 - file: scripts/point_source_source_chi_squared/images/visualization/dataset.png
   producer: scripts/point_source_source_chi_squared/visualization.py
   domain: point_source_source_chi_squared

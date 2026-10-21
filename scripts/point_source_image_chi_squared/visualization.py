@@ -12,12 +12,14 @@ Output tree (wiped at the start of every run)::
     scripts/point_source_image_chi_squared/images/visualization/
         dataset.png   <- visualize_before_fit (the plotter writes dataset_point.png; renamed)
         fit.png       <- visualize(quick_update=True)
-        image_with_points.png <- visualize(quick_update=True): the observed positions and the
-                                 model's positions + critical curves over ``data.fits``
+        image_with_points.png     <- visualize_before_fit: the observed positions over
+                                     ``data.fits`` (dataset only, no model)
+        fit_image_with_points.png <- visualize(quick_update=True): the observed
+                                     positions, the model's positions and critical curves over
+                                     ``data.fits``
 
-Every other file the visualizer writes is deleted: this domain tracks only these three
-figures. ``image_with_points.png`` is written before and after the fit to the same file;
-the kept one is the after-fit version, with the model positions.
+Every other file the visualizer writes is deleted: this domain tracks only these four
+figures.
 
 Dataset: ``dataset/point_source/simple`` (four image-plane positions, 5 mas noise; shared by
 both point-source chi-squared producers), from
@@ -70,8 +72,8 @@ dataset_path = ensure_dataset("point_source", workspace_root=REPO_ROOT)
 dataset = al.from_json(file_path=dataset_path / "point_dataset.json")
 
 """
-The accompanying imaging, used only for visualization (``image_with_points.png``), not in the
-likelihood.
+The accompanying imaging, used only for visualization (``image_with_points.png``,
+``fit_image_with_points.png``), not in the likelihood.
 """
 data = al.Array2D.from_fits(
     file_path=dataset_path / "data.fits", hdu=0, pixel_scales=tm.IMAGE_PIXEL_SCALES
@@ -130,7 +132,9 @@ VisualizerPoint.visualize(
     quick_update=True,
 )
 keep_dataset_and_fit(
-    image_path, dataset_png="dataset_point.png", extra_pngs=("image_with_points.png",)
+    image_path,
+    dataset_png="dataset_point.png",
+    extra_pngs=("image_with_points.png", "fit_image_with_points.png"),
 )
 print(f"visualize: {time.perf_counter() - t0:.1f}s")
 print(

@@ -6,7 +6,8 @@ Simulates the point-source dataset of ``true_models.point_source`` — the image
 of one point source (``point_0``) behind an isothermal lens — and writes
 ``point_dataset.json`` (the ``PointDataset``, positions only) and ``tracer.json`` into
 ``dataset/point_source/simple/``, plus the accompanying imaging (``data.fits``, ``psf.fits``,
-``noise_map.fits``) the producers plot the positions over (``image_with_points.png``).
+``noise_map.fits``) the producers plot the positions over (``image_with_points.png`` and
+``fit_image_with_points.png``).
 
 The imaging places one unlensed ``al.lp.PointSource`` per noisy image position on an
 image-plane galaxy at the lens redshift (a delta function is not lensed: its multiple images

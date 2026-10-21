@@ -133,7 +133,9 @@ VisualizerPoint.visualize(
     quick_update=True,
 )
 keep_dataset_and_fit(
-    image_path, dataset_png="dataset_point.png", extra_pngs=("image_with_points.png", "fit_image_with_points.png")
+    image_path,
+    dataset_png="dataset_point.png",
+    extra_pngs=("image_with_points.png", "fit_image_with_points.png"),
 )
 print(f"visualize: {time.perf_counter() - t0:.1f}s")
 print(

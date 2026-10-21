@@ -11,7 +11,9 @@ Output tree (wiped at the start of every run)::
 
     scripts/point_source_source_chi_squared/images/visualization/
         dataset.png   <- visualize_before_fit (the plotter writes dataset_point.png; renamed)
-        fit.png       <- visualize(quick_update=True)
+        fit.png       <- visualize(quick_update=True): Fit Positions + Fit Source Plane (the
+                         traced positions with the sigma/|mu| circles the magnification
+                         chi-squared uses)
         image_with_points.png     <- visualize_before_fit: the observed positions over
                                      ``data.fits`` (dataset only, no model)
         fit_image_with_points.png <- visualize(quick_update=True): the observed

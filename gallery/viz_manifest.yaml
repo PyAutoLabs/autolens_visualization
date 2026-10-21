@@ -20,8 +20,8 @@ figures:
   producer: scripts/cluster/visualization.py
   domain: cluster
   source: point_0
-  bytes: 68170
-  sha256: a77734d4569f512ec14657e5a6fb2c1308a1e49c7b2153e00bf83f2c83f9e860
+  bytes: 168907
+  sha256: 7d7ce74368c065b1191d815b67ccc1487214e5c97353192ab05e442e2839f732
 - file: scripts/cluster/images/visualization/point_0/point_solver.png
   producer: scripts/cluster/visualization.py
   domain: cluster
@@ -38,8 +38,8 @@ figures:
   producer: scripts/cluster/visualization.py
   domain: cluster
   source: point_1
-  bytes: 65871
-  sha256: 813846220f1a47d03f88084b92cb93507a91b6410ae72dd0138cf13eda54c667
+  bytes: 193253
+  sha256: c9df7f9860861dadca4218d0b0fe07ca0281537831d9fe1feff87f4adad8ff08
 - file: scripts/cluster/images/visualization/point_1/point_solver.png
   producer: scripts/cluster/visualization.py
   domain: cluster
@@ -380,8 +380,8 @@ figures:
   producer: scripts/point_source_image_chi_squared/visualization.py
   domain: point_source_image_chi_squared
   source: ''
-  bytes: 59992
-  sha256: 75919308cfe263625a6d71450f2eb83acc2b13a0b08f1edc3ee97720c4f5f75a
+  bytes: 145128
+  sha256: 25a1925fcf6cfa88179634c43b631b5aaf3db9737ed40134b7759dbd00072104
 - file: scripts/point_source_image_chi_squared/images/visualization/fit_image_with_points.png
   producer: scripts/point_source_image_chi_squared/visualization.py
   domain: point_source_image_chi_squared
@@ -416,8 +416,8 @@ figures:
   producer: scripts/point_source_source_chi_squared/visualization.py
   domain: point_source_source_chi_squared
   source: ''
-  bytes: 60766
-  sha256: 386aaf5cf28aa8b69b71a53962a3edde8d5673769ab7eb7f7ae81f1fe2fe9399
+  bytes: 197611
+  sha256: f397759f7afbfa511bfc5ceae1b45189eee0f2eaefcace2de76ab9e3b08e72ff
 - file: scripts/point_source_source_chi_squared/images/visualization/fit_image_with_points.png
   producer: scripts/point_source_source_chi_squared/visualization.py
   domain: point_source_source_chi_squared

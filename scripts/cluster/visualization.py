@@ -24,7 +24,9 @@ visualizer calls (``dataset_point(solver=...)`` in ``visualize_before_fit``;
 ``fit_point(quick_update=True)`` and ``point_solver`` in ``visualize``), writing the figures the
 visualizer would. The "Fit Positions" and point-solver panels draw the tracer's critical curves,
 computed once per dataset (as the visualizer does) on a 100x100 grid covering the solver grid: for
-this 15-galaxy multi-plane lens that costs ~2 min per dataset.
+this 15-galaxy multi-plane lens that costs ~2 min per dataset. The "Fit Source Plane" panel of
+``fit.png`` draws the caustics of the point's own plane (``point_0`` is at z=1, in front of the
+last plane), computed separately for a point not in the last plane.
 
 The point plotter writes ``dataset_point.png`` (renamed to ``dataset.png``); every other file
 the visualizer writes is deleted.

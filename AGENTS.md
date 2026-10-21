@@ -73,6 +73,10 @@ bespoke figures are a follow-up through the Eyes dashboard. `cluster` calls the
 `PlotterPoint` methods directly instead of `VisualizerPoint`, skipping the untracked tracer and
 galaxy figures; the "Fit Positions" and point-solver panels still draw the critical curves, which
 cost ~2 min per dataset on the 15-galaxy multi-plane lens (the PNGs match the visualizer's).
+Every point-source `fit.png` (both chi-squared domains and `cluster`) also has a "Fit Source
+Plane" panel — the observed positions traced to the point's own plane — whose presentation
+follows the fit class: context only for an image-plane chi-squared, the chi-squared's own noise
+footprint and value for a source-plane chi-squared (PyAutoLens#789).
 
 **Point solver.** `point_source_image_chi_squared` (via `visualize(quick_update=False)`) and
 `cluster` (per plane) also keep `point_solver.png`: the model's real `PointSolver` refining onto

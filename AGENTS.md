@@ -22,10 +22,12 @@ figure changes land here (producer / config) or in the libraries (plot API), nev
 
 ## Repository Structure
 
-The `scripts/<domain>/` folders mirror the `autolens_workspace/scripts/` dataset folders (none
-go in `misc/`). Producers are laid out **flat** (`scripts/<domain>/visualization*.py`), because
-the Brain Eyes agent scans `scripts/<domain>/*.py` non-recursively for stems containing
-`visualization`. Each producer `<stem>.py` writes `scripts/<domain>/images/<stem>/`:
+There is **one folder per dataset type, each with exactly one `visualization.py`** (none go in
+`misc/`). The folders mirror the `autolens_workspace/scripts/` dataset folders; a variant of a
+dataset type (another likelihood, a datacube) gets its own top-level folder
+(`point_source_image_chi_squared`, `interferometer_datacube`). Producers are flat because the
+Brain Eyes agent scans `scripts/<domain>/*.py` non-recursively for stems containing
+`visualization`. Each producer writes `scripts/<domain>/images/visualization/`:
 
 ```
 scripts/
@@ -33,9 +35,9 @@ scripts/
                                         before-fit PNGs + parametric/ + delaunay/
   interferometer/visualization.py       VisualizerInterferometer on dataset/interferometer/sma
                                         — full set, same layout
-  interferometer/visualization_datacube.py   per channel: channel_<i>/{dataset,fit}.png
-  point_source/visualization_image_chi_squared.py   VisualizerPoint, FitPositionsImagePair
-  point_source/visualization_source_chi_squared.py  VisualizerPoint, FitPositionsSource
+  interferometer_datacube/visualization.py          per channel: channel_<i>/{dataset,fit}.png
+  point_source_image_chi_squared/visualization.py   VisualizerPoint, FitPositionsImagePair
+  point_source_source_chi_squared/visualization.py  VisualizerPoint, FitPositionsSource
   multi_galaxy/visualization.py         VisualizerImaging, two lenses + extra galaxy
   group/visualization.py                VisualizerImaging, main lens + two extra galaxies
   cluster/visualization.py              PlotterPoint, multi-plane: point_<i>/{dataset,fit}.png
@@ -92,7 +94,7 @@ python gallery/gallery_build.py          # rebuild GALLERY.md + gallery/viz_mani
 python gallery/gallery_build.py --check  # fail if GALLERY.md or the manifest is stale vs the PNGs on disk
 ```
 
-Each producer wipes its own `scripts/<domain>/images/<stem>/` tree first, so the committed
+Each producer wipes its own `scripts/<domain>/images/visualization/` tree first, so the committed
 PNG set is exactly what the last run produced. Commit the PNGs, `GALLERY.md` and
 `gallery/viz_manifest.yaml` together.
 
@@ -139,19 +141,19 @@ producer, so the fit is always of the model that made the data. Each is register
 ## Adding a domain
 
 1. Name the domain after the `autolens_workspace/scripts/<folder>` it mirrors; never put a
-   producer in `misc/`.
+   producer in `misc/`. **One folder per dataset type, each with exactly one
+   `visualization.py`; a variant gets its own top-level folder** (e.g.
+   `point_source_image_chi_squared`, `interferometer_datacube`), never a second producer or a
+   sub-folder.
 2. Put the true model in `true_models/<name>.py`, add a simulator
    `scripts/misc/simulators/<name>.py` (accepting `--instrument <name>` and `--output-root`)
    that builds the dataset from it, register it in `_viz_cli.DATASETS`, and track its dataset
    under `dataset/<domain>/<name>/` (keep it small: KBs to low MBs).
 3. Add a flat producer `scripts/<domain>/visualization.py` modelled on an existing one, writing
    to `scripts/<domain>/images/visualization/`.
-4. **Variants are extra producers, never sub-folders.** A variant of a domain (another
-   likelihood, a datacube) is a sibling file `scripts/<domain>/visualization_<variant>.py`
-   writing `scripts/<domain>/images/visualization_<variant>/` — the Eyes conductor scans only
-   the top level of `scripts/<domain>/`, and PyAutoEyes groups figures by producer within a
-   domain. Sub-datasets of one producer (bands, channels, planes) are sub-folders of its
-   image dir.
+4. Sub-datasets of one producer (bands, channels, planes) are sub-folders of its image dir.
+   Variants may share a dataset (both point-source producers read `dataset/point_source/simple`).
+   Add the domain to PyAutoEyes' `DOMAIN_ORDER` so it sorts canonically on the dashboard.
 5. Run `bash gallery/gallery_run.sh --all` and commit the PNGs + `GALLERY.md` +
    `gallery/viz_manifest.yaml`.
 
@@ -161,7 +163,7 @@ producer, so the fit is always of the model that made the data. Each is register
 - **plot API** — the plotting code in the libraries: `PyAutoLens/autolens/**/plot/`,
   `PyAutoGalaxy/autogalaxy/**/plot/`, `PyAutoArray/autoarray/plot/` (library changes go through
   the normal library workflow, then this repo is re-rendered).
-- **script** — the producer in `scripts/<domain>/visualization*.py` (dataset, model, source
+- **script** — the producer in `scripts/<domain>/visualization.py` (dataset, model, source
   types) and its `true_models/` / simulator.
 
 ## Eyes contracts

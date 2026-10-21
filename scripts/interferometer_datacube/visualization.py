@@ -9,13 +9,13 @@ channel's analysis separately, so this producer calls the visualizer once per ch
 
 Output tree (wiped at the start of every run)::
 
-    scripts/interferometer/images/visualization_datacube/
+    scripts/interferometer_datacube/images/visualization/
         channel_0/dataset.png, channel_0/fit.png   <- visualize_before_fit, visualize(quick_update=True)
         channel_1/..., channel_2/...
 
-Every other file the visualizer writes is deleted: this variant tracks only the dataset and
+Every other file the visualizer writes is deleted: this domain tracks only the dataset and
 the fit of each channel. (The full figure set of a single interferometer dataset is
-``visualization.py`` beside this file.)
+``scripts/interferometer/visualization.py``.)
 
 Dataset: ``dataset/interferometer/datacube`` (three channels, the ``sma`` uv-coverage, 256x256
 real-space grid at 0.1"/pix, circular mask 3.5"), from
@@ -24,7 +24,7 @@ channel (``true_models/datacube.py``).
 
 Run from the repo root::
 
-    python scripts/interferometer/visualization_datacube.py
+    python scripts/interferometer_datacube/visualization.py
 """
 
 import shutil
@@ -49,7 +49,7 @@ from autolens import conf
 
 conf.instance.push(
     new_path=str(REPO_ROOT / "config"),
-    output_path=str(REPO_ROOT / "scripts" / "interferometer" / "images"),
+    output_path=str(REPO_ROOT / "scripts" / "interferometer_datacube" / "images"),
 )
 
 import autofit as af
@@ -63,7 +63,7 @@ from true_models import datacube as tm
 STEM = Path(__file__).stem
 config = INSTRUMENTS["sma"]
 
-dataset_path = ensure_dataset("datacube", workspace_root=REPO_ROOT)
+dataset_path = ensure_dataset("interferometer_datacube", workspace_root=REPO_ROOT)
 
 real_space_mask = al.Mask2D.circular(
     shape_native=config["real_space_shape"],
@@ -74,12 +74,12 @@ real_space_mask = al.Mask2D.circular(
 """
 __Paths__
 """
-image_path = REPO_ROOT / "scripts" / "interferometer" / "images" / STEM
+image_path = REPO_ROOT / "scripts" / "interferometer_datacube" / "images" / STEM
 if image_path.exists():
     shutil.rmtree(image_path)
 image_path.mkdir(parents=True)
 
-scratch_root = REPO_ROOT / "output" / "visualization" / "interferometer" / STEM
+scratch_root = REPO_ROOT / "output" / "visualization" / "interferometer_datacube" / STEM
 if scratch_root.exists():
     shutil.rmtree(scratch_root)
 

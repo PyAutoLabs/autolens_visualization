@@ -25,10 +25,11 @@ Every figure below is what the PyAutoLens visualizers (`VisualizerImaging`, `Vis
     - [top level](#interferometer--visualization--top-level)
     - [delaunay/](#interferometer--visualization--delaunay)
     - [parametric/](#interferometer--visualization--parametric)
-  - [visualization_datacube](#interferometer--visualization_datacube) (6 figures)
-    - [channel_0/](#interferometer--visualization_datacube--channel_0)
-    - [channel_1/](#interferometer--visualization_datacube--channel_1)
-    - [channel_2/](#interferometer--visualization_datacube--channel_2)
+- [interferometer_datacube](#interferometer_datacube)
+  - [visualization](#interferometer_datacube--visualization) (6 figures)
+    - [channel_0/](#interferometer_datacube--visualization--channel_0)
+    - [channel_1/](#interferometer_datacube--visualization--channel_1)
+    - [channel_2/](#interferometer_datacube--visualization--channel_2)
 - [multi_dataset](#multi_dataset)
   - [visualization](#multi_dataset--visualization) (4 figures)
     - [g/](#multi_dataset--visualization--g)
@@ -36,11 +37,12 @@ Every figure below is what the PyAutoLens visualizers (`VisualizerImaging`, `Vis
 - [multi_galaxy](#multi_galaxy)
   - [visualization](#multi_galaxy--visualization) (2 figures)
     - [top level](#multi_galaxy--visualization--top-level)
-- [point_source](#point_source)
-  - [visualization_image_chi_squared](#point_source--visualization_image_chi_squared) (2 figures)
-    - [top level](#point_source--visualization_image_chi_squared--top-level)
-  - [visualization_source_chi_squared](#point_source--visualization_source_chi_squared) (2 figures)
-    - [top level](#point_source--visualization_source_chi_squared--top-level)
+- [point_source_image_chi_squared](#point_source_image_chi_squared)
+  - [visualization](#point_source_image_chi_squared--visualization) (2 figures)
+    - [top level](#point_source_image_chi_squared--visualization--top-level)
+- [point_source_source_chi_squared](#point_source_source_chi_squared)
+  - [visualization](#point_source_source_chi_squared--visualization) (2 figures)
+    - [top level](#point_source_source_chi_squared--visualization--top-level)
 - [weak](#weak)
   - [visualization](#weak--visualization) (2 figures)
     - [top level](#weak--visualization--top-level)
@@ -263,37 +265,39 @@ Every figure below is what the PyAutoLens visualizers (`VisualizerImaging`, `Vis
 
 ![tracer](scripts/interferometer/images/visualization/parametric/tracer.png)
 
-### interferometer / visualization_datacube
+## interferometer_datacube
 
-#### interferometer / visualization_datacube / channel_0/
+### interferometer_datacube / visualization
 
-##### dataset
-
-![dataset](scripts/interferometer/images/visualization_datacube/channel_0/dataset.png)
-
-##### fit
-
-![fit](scripts/interferometer/images/visualization_datacube/channel_0/fit.png)
-
-#### interferometer / visualization_datacube / channel_1/
+#### interferometer_datacube / visualization / channel_0/
 
 ##### dataset
 
-![dataset](scripts/interferometer/images/visualization_datacube/channel_1/dataset.png)
+![dataset](scripts/interferometer_datacube/images/visualization/channel_0/dataset.png)
 
 ##### fit
 
-![fit](scripts/interferometer/images/visualization_datacube/channel_1/fit.png)
+![fit](scripts/interferometer_datacube/images/visualization/channel_0/fit.png)
 
-#### interferometer / visualization_datacube / channel_2/
+#### interferometer_datacube / visualization / channel_1/
 
 ##### dataset
 
-![dataset](scripts/interferometer/images/visualization_datacube/channel_2/dataset.png)
+![dataset](scripts/interferometer_datacube/images/visualization/channel_1/dataset.png)
 
 ##### fit
 
-![fit](scripts/interferometer/images/visualization_datacube/channel_2/fit.png)
+![fit](scripts/interferometer_datacube/images/visualization/channel_1/fit.png)
+
+#### interferometer_datacube / visualization / channel_2/
+
+##### dataset
+
+![dataset](scripts/interferometer_datacube/images/visualization/channel_2/dataset.png)
+
+##### fit
+
+![fit](scripts/interferometer_datacube/images/visualization/channel_2/fit.png)
 
 ## multi_dataset
 
@@ -333,31 +337,33 @@ Every figure below is what the PyAutoLens visualizers (`VisualizerImaging`, `Vis
 
 ![fit](scripts/multi_galaxy/images/visualization/fit.png)
 
-## point_source
+## point_source_image_chi_squared
 
-### point_source / visualization_image_chi_squared
+### point_source_image_chi_squared / visualization
 
-#### point_source / visualization_image_chi_squared / top level
-
-##### dataset
-
-![dataset](scripts/point_source/images/visualization_image_chi_squared/dataset.png)
-
-##### fit
-
-![fit](scripts/point_source/images/visualization_image_chi_squared/fit.png)
-
-### point_source / visualization_source_chi_squared
-
-#### point_source / visualization_source_chi_squared / top level
+#### point_source_image_chi_squared / visualization / top level
 
 ##### dataset
 
-![dataset](scripts/point_source/images/visualization_source_chi_squared/dataset.png)
+![dataset](scripts/point_source_image_chi_squared/images/visualization/dataset.png)
 
 ##### fit
 
-![fit](scripts/point_source/images/visualization_source_chi_squared/fit.png)
+![fit](scripts/point_source_image_chi_squared/images/visualization/fit.png)
+
+## point_source_source_chi_squared
+
+### point_source_source_chi_squared / visualization
+
+#### point_source_source_chi_squared / visualization / top level
+
+##### dataset
+
+![dataset](scripts/point_source_source_chi_squared/images/visualization/dataset.png)
+
+##### fit
+
+![fit](scripts/point_source_source_chi_squared/images/visualization/fit.png)
 
 ## weak
 

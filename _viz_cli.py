@@ -59,6 +59,8 @@ def dataset_path(dataset_type: str, instrument: str) -> Path:
 
 
 # Every tracked dataset: key -> (dataset/<type>/<name>, simulator stem, sentinel file).
+# Keys are the dataset-type domains, except ``point_source``: one dataset shared by the
+# ``point_source_image_chi_squared`` and ``point_source_source_chi_squared`` producers.
 # The simulator is ``scripts/misc/simulators/<stem>.py --instrument <name>``; for the
 # dataset types without instrument presets the "instrument" is the dataset name. The
 # sentinel is the file whose presence means "the dataset is there, do not simulate".
@@ -70,7 +72,7 @@ DATASETS: dict[str, dict[str, str]] = {
         "simulator": "interferometer",
         "sentinel": "data.fits",
     },
-    "datacube": {
+    "interferometer_datacube": {
         "type": "interferometer",
         "name": "datacube",
         "simulator": "datacube",

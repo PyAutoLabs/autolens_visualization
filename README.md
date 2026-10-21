@@ -22,13 +22,16 @@ visualizer output in git — on realistic HST-scale imaging and SMA-scale interf
 there is one place to see every figure, judge it, and improve it (by hand or in an AI chat
 pointed at the plotting source) without re-running anything.
 
-Every PyAutoLens dataset type has a folder under `scripts/`, mirroring `autolens_workspace`:
+Every PyAutoLens dataset type has one folder under `scripts/` with one `visualization.py`,
+mirroring `autolens_workspace` (a variant gets its own folder):
 
-| Domain | Producer(s) | Figures |
+| Domain | Producer | Figures |
 |--------|-------------|---------|
 | `imaging` | `visualization.py` | full set: parametric + Delaunay source |
-| `interferometer` | `visualization.py`, `visualization_datacube.py` | full set; datacube: `dataset.png` + `fit.png` per channel |
-| `point_source` | `visualization_image_chi_squared.py`, `visualization_source_chi_squared.py` | `dataset.png` + `fit.png` |
+| `interferometer` | `visualization.py` | full set: parametric + Delaunay source |
+| `interferometer_datacube` | `visualization.py` | `dataset.png` + `fit.png` per channel |
+| `point_source_image_chi_squared` | `visualization.py` | `dataset.png` + `fit.png` |
+| `point_source_source_chi_squared` | `visualization.py` | `dataset.png` + `fit.png` |
 | `multi_galaxy` | `visualization.py` | `dataset.png` + `fit.png` |
 | `group` | `visualization.py` | `dataset.png` + `fit.png` |
 | `cluster` | `visualization.py` | `dataset.png` + `fit.png` per point-source plane |
@@ -62,8 +65,9 @@ result and pings PyAutoEyes (`repository_dispatch: eyes-refresh`) to refresh its
   `scripts/misc/simulators/` that builds the dataset from it, register it in `_viz_cli.DATASETS`
   and track its dataset under `dataset/<domain>/<name>/`.
 - Add a flat producer `scripts/<domain>/visualization.py` modelled on
-  [`scripts/imaging/visualization.py`](scripts/imaging/visualization.py). A variant of a domain is
-  another producer beside it, `scripts/<domain>/visualization_<variant>.py` — never a sub-folder.
+  [`scripts/imaging/visualization.py`](scripts/imaging/visualization.py). One folder per dataset type,
+  each with exactly one `visualization.py`; a variant gets its own top-level folder (e.g.
+  `point_source_image_chi_squared`, `interferometer_datacube`).
 - Run `bash gallery/gallery_run.sh --all` and commit the PNGs + `GALLERY.md` +
   `gallery/viz_manifest.yaml`.
 
@@ -76,7 +80,7 @@ Three edit surfaces, from cheapest to deepest:
 - **Plot API** — the plotting code in the libraries: `PyAutoLens/autolens/**/plot/`,
   `PyAutoGalaxy/autogalaxy/**/plot/`, `PyAutoArray/autoarray/plot/`. Change it there (normal
   library workflow), then re-render here.
-- **Script** — the producer in `scripts/<domain>/visualization*.py` (dataset, model, source types).
+- **Script** — the producer in `scripts/<domain>/visualization.py` (dataset, model, source types).
 
 The Brain Eyes agent runs the review loop on this repo:
 `bin/pyauto-brain eyes survey lens/autolens_visualization`.

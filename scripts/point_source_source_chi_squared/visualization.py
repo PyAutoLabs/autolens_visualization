@@ -9,20 +9,21 @@ latest version of each lives in git (``GALLERY.md``).
 
 Output tree (wiped at the start of every run)::
 
-    scripts/point_source/images/visualization_source_chi_squared/
+    scripts/point_source_source_chi_squared/images/visualization/
         dataset.png   <- visualize_before_fit (the plotter writes dataset_point.png; renamed)
         fit.png       <- visualize(quick_update=True)
 
 Every other file the visualizer writes is deleted: this domain tracks only the dataset and
 the fit (bespoke point-source figures are a follow-up).
 
-Dataset: ``dataset/point_source/simple`` (four image-plane positions, 5 mas noise), from
+Dataset: ``dataset/point_source/simple`` (four image-plane positions, 5 mas noise; shared by
+both point-source chi-squared producers), from
 ``scripts/misc/simulators/point_source.py``. The model is that simulator's TRUE model
 (``true_models/point_source.py``) with a free-centre ``al.ps.Point``.
 
 Run from the repo root::
 
-    python scripts/point_source/visualization_source_chi_squared.py
+    python scripts/point_source_source_chi_squared/visualization.py
 """
 
 import shutil
@@ -47,7 +48,7 @@ from autolens import conf
 
 conf.instance.push(
     new_path=str(REPO_ROOT / "config"),
-    output_path=str(REPO_ROOT / "scripts" / "point_source" / "images"),
+    output_path=str(REPO_ROOT / "scripts" / "point_source_source_chi_squared" / "images"),
 )
 
 import autofit as af
@@ -77,7 +78,7 @@ model = af.Collection(galaxies=af.Collection(lens=tm.lens(), source=tm.source())
 __Analysis__
 
 ``FitPositionsSource`` never solves the lens equation, but ``AnalysisPoint`` always takes a
-``PointSolver`` (the same one as the image-plane producer).
+``PointSolver`` (the same one as ``point_source_image_chi_squared``).
 """
 solver = al.PointSolver.for_grid(
     grid=tm.solver_grid(), pixel_scale_precision=0.001, magnification_threshold=0.1
@@ -93,12 +94,12 @@ analysis = al.AnalysisPoint(
 """
 __Paths__
 """
-image_path = REPO_ROOT / "scripts" / "point_source" / "images" / STEM
+image_path = REPO_ROOT / "scripts" / "point_source_source_chi_squared" / "images" / STEM
 if image_path.exists():
     shutil.rmtree(image_path)
 image_path.mkdir(parents=True)
 
-scratch = REPO_ROOT / "output" / "visualization" / "point_source" / STEM
+scratch = REPO_ROOT / "output" / "visualization" / "point_source_source_chi_squared" / STEM
 if scratch.exists():
     shutil.rmtree(scratch)
 scratch.mkdir(parents=True)

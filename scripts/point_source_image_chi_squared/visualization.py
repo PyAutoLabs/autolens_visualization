@@ -12,9 +12,12 @@ Output tree (wiped at the start of every run)::
     scripts/point_source_image_chi_squared/images/visualization/
         dataset.png   <- visualize_before_fit (the plotter writes dataset_point.png; renamed)
         fit.png       <- visualize(quick_update=True)
+        image_with_points.png <- visualize(quick_update=True): the observed positions and the
+                                 model's positions + critical curves over ``data.fits``
 
-Every other file the visualizer writes is deleted: this domain tracks only the dataset and
-the fit (bespoke point-source figures are a follow-up).
+Every other file the visualizer writes is deleted: this domain tracks only these three
+figures. ``image_with_points.png`` is written before and after the fit to the same file;
+the kept one is the after-fit version, with the model positions.
 
 Dataset: ``dataset/point_source/simple`` (four image-plane positions, 5 mas noise; shared by
 both point-source chi-squared producers), from
@@ -67,6 +70,14 @@ dataset_path = ensure_dataset("point_source", workspace_root=REPO_ROOT)
 dataset = al.from_json(file_path=dataset_path / "point_dataset.json")
 
 """
+The accompanying imaging, used only for visualization (``image_with_points.png``), not in the
+likelihood.
+"""
+data = al.Array2D.from_fits(
+    file_path=dataset_path / "data.fits", hdu=0, pixel_scales=tm.IMAGE_PIXEL_SCALES
+)
+
+"""
 __True Model__
 
 The simulator's lens and source, every parameter fixed: the prior-median instance IS the true
@@ -86,6 +97,7 @@ solver = al.PointSolver.for_grid(
 analysis = al.AnalysisPoint(
     dataset=dataset,
     solver=solver,
+    image=data,
     fit_positions_cls=al.FitPositionsImagePair,
     use_jax=False,
 )
@@ -117,7 +129,9 @@ VisualizerPoint.visualize(
     during_analysis=False,
     quick_update=True,
 )
-keep_dataset_and_fit(image_path, dataset_png="dataset_point.png")
+keep_dataset_and_fit(
+    image_path, dataset_png="dataset_point.png", extra_pngs=("image_with_points.png",)
+)
 print(f"visualize: {time.perf_counter() - t0:.1f}s")
 print(
     f"Wrote {sorted(p.name for p in image_path.iterdir())} under {image_path.relative_to(REPO_ROOT)}"

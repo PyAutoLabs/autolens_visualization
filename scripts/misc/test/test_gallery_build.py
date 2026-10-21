@@ -198,3 +198,53 @@ def test_check_never_rewrites_gallery_md(tree):
     (tree / "scripts" / "alpha" / "images" / "visualization" / "c.png").write_bytes(PNG_BYTES)
     _build(tree, "--check")
     assert (tree / "GALLERY.md").read_text() == before
+
+
+@pytest.fixture
+def multi_tree(tree):
+    """The repo convention: one ``visualization.py`` per domain folder. A variant of ``alpha``
+    is its own domain ``alpha_variant``; ``beta`` writes one pair per sub-dataset folder."""
+    variant = tree / "scripts" / "alpha_variant" / "images" / "visualization"
+    variant.mkdir(parents=True)
+    (variant / "dataset.png").write_bytes(PNG_BYTES)
+    (variant / "fit.png").write_bytes(PNG_BYTES + b"fit")
+    for band in ("g", "r"):
+        band_dir = tree / "scripts" / "beta" / "images" / "visualization" / band
+        band_dir.mkdir(parents=True)
+        (band_dir / "dataset.png").write_bytes(PNG_BYTES)
+        (band_dir / "fit.png").write_bytes(PNG_BYTES)
+    return tree
+
+
+def test_variant_domains_and_sub_datasets_in_manifest(multi_tree):
+    assert _build(multi_tree) == 0
+    doc = yaml.safe_load((multi_tree / "gallery" / "viz_manifest.yaml").read_text())
+    assert doc["figure_count"] == 8
+    by_file = {f["file"]: f for f in doc["figures"]}
+    variant = by_file["scripts/alpha_variant/images/visualization/fit.png"]
+    assert variant["producer"] == "scripts/alpha_variant/visualization.py"
+    assert variant["domain"] == "alpha_variant"
+    assert variant["source"] == ""
+    band = by_file["scripts/beta/images/visualization/r/fit.png"]
+    assert band["producer"] == "scripts/beta/visualization.py"
+    assert band["source"] == "r"
+    assert [f["domain"] for f in doc["figures"]] == ["alpha"] * 2 + ["alpha_variant"] * 2 + [
+        "beta"
+    ] * 4
+
+
+def test_variant_domains_and_sub_datasets_in_gallery_md(multi_tree):
+    assert _build(multi_tree) == 0
+    md = (multi_tree / "GALLERY.md").read_text()
+    assert "## alpha_variant" in md
+    assert "### alpha_variant / visualization" in md
+    assert "#### beta / visualization / g/" in md
+    assert "#### beta / visualization / r/" in md
+    assert "![fit](scripts/alpha_variant/images/visualization/fit.png)" in md
+    assert _build(multi_tree, "--check") == 0
+
+
+def test_check_fails_when_a_sub_dataset_drops_a_figure(multi_tree):
+    assert _build(multi_tree) == 0
+    (multi_tree / "scripts" / "beta" / "images" / "visualization" / "g" / "fit.png").unlink()
+    assert _build(multi_tree, "--check") == 1

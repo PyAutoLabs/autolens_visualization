@@ -2,7 +2,9 @@
 
 This repo is the single home for **what PyAutoLens figures look like**: it stores, in git, the
 most up-to-date rendering of every figure the PyAutoLens visualizers write during a model-fit,
-on realistic HST-scale imaging and SMA-scale interferometer data, so visualization can be judged
+on realistic HST-scale imaging and SMA-scale interferometer data — plus the dataset and fit
+figures of every other PyAutoLens dataset type (point source, multi-galaxy, group, cluster,
+multi-dataset, interferometer datacube, weak lensing) — so visualization can be judged
 and improved (by humans or AI chats against the source) without re-running a workspace fit. It is
 a collection of standalone producer scripts, **not** an installable package — there is no
 `pyproject.toml`. These are the canonical, agent-agnostic instructions for this repo; the
@@ -20,29 +22,57 @@ figure changes land here (producer / config) or in the libraries (plot API), nev
 
 ## Repository Structure
 
-Producers are laid out **flat, one per domain** (`scripts/<domain>/visualization*.py`), because
-the Brain Eyes agent scans `scripts/<domain>/*.py` non-recursively for stems containing
-`visualization`:
+There is **one folder per dataset type, each with exactly one `visualization.py`** (none go in
+`misc/`). The folders mirror the `autolens_workspace/scripts/` dataset folders; a variant of a
+dataset type (another likelihood, a datacube) gets its own top-level folder
+(`point_source_image_chi_squared`, `interferometer_datacube`). Producers are flat because the
+Brain Eyes agent scans `scripts/<domain>/*.py` non-recursively for stems containing
+`visualization`. Each producer writes `scripts/<domain>/images/visualization/`:
 
 ```
 scripts/
-  imaging/visualization.py          VisualizerImaging on dataset/imaging/hst
-  imaging/images/visualization/     its output: before-fit PNGs + parametric/ + delaunay/
-  interferometer/visualization.py   VisualizerInterferometer on dataset/interferometer/sma
-  interferometer/images/visualization/
-  misc/simulators/                  imaging.py + interferometer.py (regenerate datasets)
-  misc/test/                        hermetic pytest for the gallery builder
-gallery/gallery_build.py            GALLERY.md + gallery/viz_manifest.yaml + output/gallery/
-gallery/viz_manifest.yaml           TRACKED, generated figure manifest (PyAutoEyes read contract)
-gallery/gallery_run.sh              run producers -> build -> --check
-config/general.yaml                 layered over the library config (version check off)
-config/visualize/plots.yaml         the library default with EVERY toggle on
-instruments/                        imaging + interferometer presets (copied from profiling)
-dataset/imaging/hst/                TRACKED, byte-for-byte copy of autolens_profiling's hst
-dataset/interferometer/sma/         TRACKED, simulated here (190 visibilities)
-_viz_cli.py                         repo-root finder, dataset paths, auto-simulate hook
-GALLERY.md                          TRACKED, generated — never edit by hand
+  imaging/visualization.py              VisualizerImaging on dataset/imaging/hst — full set:
+                                        before-fit PNGs + parametric/ + delaunay/
+  interferometer/visualization.py       VisualizerInterferometer on dataset/interferometer/sma
+                                        — full set, same layout
+  interferometer_datacube/visualization.py          per channel: channel_<i>/{dataset,fit}.png
+  point_source_image_chi_squared/visualization.py   VisualizerPoint, FitPositionsImagePair
+  point_source_source_chi_squared/visualization.py  VisualizerPoint, FitPositionsSource
+  multi_galaxy/visualization.py         VisualizerImaging, two lenses + extra galaxy
+  group/visualization.py                VisualizerImaging, main lens + two extra galaxies
+  cluster/visualization.py              PlotterPoint, multi-plane: point_<i>/{dataset,fit}.png
+  multi_dataset/visualization.py        VisualizerImaging per band: <band>/{dataset,fit}.png
+  weak/visualization.py                 VisualizerWeak
+  misc/simulators/                      one simulator per dataset (regenerate datasets)
+  misc/test/                            hermetic pytest for the gallery builder
+true_models/                            the true model of each newer dataset type, shared by
+                                        its simulator and producer
+gallery/gallery_build.py                GALLERY.md + gallery/viz_manifest.yaml + output/gallery/
+gallery/viz_manifest.yaml               TRACKED, generated figure manifest (PyAutoEyes read contract)
+gallery/gallery_run.sh                  run producers -> build -> --check
+config/general.yaml                     layered over the library config (version check off)
+config/visualize/plots.yaml             the library default with EVERY toggle on
+instruments/                            imaging + interferometer presets (copied from profiling)
+dataset/imaging/hst/                    TRACKED, byte-for-byte copy of autolens_profiling's hst
+dataset/interferometer/sma/             TRACKED, simulated here (190 visibilities)
+dataset/<domain>/<name>/                TRACKED, simulated here (see `DATASETS` in _viz_cli.py)
+_viz_cli.py                             repo-root finder, DATASETS registry, auto-simulate hook,
+                                        keep_dataset_and_fit pruning helper
+GALLERY.md                              TRACKED, generated — never edit by hand
 ```
+
+**Two figures per newer dataset type.** Imaging and interferometer (`visualization.py`) render
+the full figure set. Every other producer tracks only `dataset.png` and `fit.png`: it calls
+`visualize_before_fit`, then `visualize(..., quick_update=True)` with the true model, then
+`_viz_cli.keep_dataset_and_fit` renames the plotter's files where they differ (point:
+`dataset_point.png`; weak: `subplot_weak_dataset.png` / `subplot_fit_weak.png`) and deletes
+everything else. Producers with several sub-datasets write one pair per sub-folder
+(`multi_dataset` per band, the datacube per channel, `cluster` per point-source plane). Many
+of these figures are the galaxy-scale plots and look poor on point / cluster / weak data —
+bespoke figures are a follow-up through the Eyes dashboard. `cluster` calls the two
+`PlotterPoint` methods directly instead of `VisualizerPoint`: the visualizer's critical-curve
+pre-pass costs ~100 s on the 15-galaxy multi-plane lens and the point fit subplot never draws
+the curves (the PNGs are byte-identical).
 
 **What is tracked.** PNG figures under `scripts/<domain>/images/**`, `GALLERY.md` and
 `gallery/viz_manifest.yaml`. The FITS /
@@ -58,7 +88,7 @@ import by their top-level names.
 From the repo root, with the library checkouts on `PYTHONPATH` (`source activate.sh`):
 
 ```bash
-bash gallery/gallery_run.sh --all        # both producers, then build + --check (~3 min)
+bash gallery/gallery_run.sh --all        # every producer, then build + --check (~4 min)
 python scripts/imaging/visualization.py  # one producer (~75 s)
 python gallery/gallery_build.py          # rebuild GALLERY.md + gallery/viz_manifest.yaml + output/gallery/
 python gallery/gallery_build.py --check  # fail if GALLERY.md or the manifest is stale vs the PNGs on disk
@@ -70,7 +100,7 @@ PNG set is exactly what the last run produced. Commit the PNGs, `GALLERY.md` and
 
 **The tracked manifest** (`gallery/viz_manifest.yaml`, schema 1) lists every committed PNG as
 `{file, producer, domain, source, bytes, sha256}` (`source` = the per-source sub-folder,
-`parametric` / `delaunay`, or `""` for the before-fit figures), plus `rendered_with:` (the
+`parametric` / `delaunay`, a band / channel / `point_<i>`, or `""` for top-level figures), plus `rendered_with:` (the
 autolens / autogalaxy / autoarray / autofit versions) and `generated:` (the date the figures or
 stack last changed — carried over on an unchanged rebuild, so re-running is a git no-op). There
 are no mtimes: it is reproducible from a checkout. `--check` ignores only `generated:` and
@@ -79,7 +109,8 @@ PyAutoEyes dashboard — change its shape only together with the organ.
 
 Each producer pushes `config/` via `conf.instance.push` (the all-true `plots.yaml`), loads its
 tracked dataset, builds the simulator's **true model** (every parameter fixed), and calls
-`Visualizer*.visualize_before_fit` once and `Visualizer*.visualize` once per source type
+`Visualizer*.visualize_before_fit` once and `Visualizer*.visualize` once per source type (the
+imaging and interferometer `visualization.py` producers; the others are described above)
 (`parametric/` = SersicCore, `delaunay/` = Overlay image-mesh + `Delaunay` + `ConstantSplit`),
 with a `SimpleNamespace(image_path=..., output_path=...)` paths stub. Adapt images are the
 per-galaxy images of the parametric fit.
@@ -96,15 +127,34 @@ with the imaging simulator's lens mass, shear and source (no lens light). This r
 preset **deviates from autolens_profiling**: `noise_sigma` is 10.0 (profiling: 1000.0), so the
 integrated SNR is a few hundred and the dirty image, residual and chi-squared panels show the ring
 instead of pure noise. The auto-simulate hook
-in `_viz_cli.py` only fires when `data.fits` is absent — it never deletes a tracked dataset.
+in `_viz_cli.py` only fires when the dataset's sentinel file is absent — it never deletes a
+tracked dataset.
+
+The newer datasets are simulated here from `scripts/misc/simulators/<name>.py`, each adapted
+from the matching `autolens_workspace` simulator (`datacube.py` from
+`interferometer/features/datacube/simulator.py`) and cut down to stay small, with seeded noise.
+Their true models live in `true_models/<name>.py`, imported by both the simulator and the
+producer, so the fit is always of the model that made the data. Each is registered in
+`_viz_cli.DATASETS` (directory, simulator stem, sentinel file); producers call
+`ensure_dataset("<key>")`, which simulates only when the sentinel is missing.
 
 ## Adding a domain
 
-1. Add a simulator under `scripts/misc/simulators/` (or an instrument preset) and track its
-   dataset under `dataset/<domain>/<instrument>/`.
-2. Add a flat producer `scripts/<domain>/visualization.py` modelled on the imaging one, writing
+1. Name the domain after the `autolens_workspace/scripts/<folder>` it mirrors; never put a
+   producer in `misc/`. **One folder per dataset type, each with exactly one
+   `visualization.py`; a variant gets its own top-level folder** (e.g.
+   `point_source_image_chi_squared`, `interferometer_datacube`), never a second producer or a
+   sub-folder.
+2. Put the true model in `true_models/<name>.py`, add a simulator
+   `scripts/misc/simulators/<name>.py` (accepting `--instrument <name>` and `--output-root`)
+   that builds the dataset from it, register it in `_viz_cli.DATASETS`, and track its dataset
+   under `dataset/<domain>/<name>/` (keep it small: KBs to low MBs).
+3. Add a flat producer `scripts/<domain>/visualization.py` modelled on an existing one, writing
    to `scripts/<domain>/images/visualization/`.
-3. Run `bash gallery/gallery_run.sh --all` and commit the PNGs + `GALLERY.md` +
+4. Sub-datasets of one producer (bands, channels, planes) are sub-folders of its image dir.
+   Variants may share a dataset (both point-source producers read `dataset/point_source/simple`).
+   Add the domain to PyAutoEyes' `DOMAIN_ORDER` so it sorts canonically on the dashboard.
+5. Run `bash gallery/gallery_run.sh --all` and commit the PNGs + `GALLERY.md` +
    `gallery/viz_manifest.yaml`.
 
 ## Improving a figure (edit surfaces)
@@ -113,7 +163,8 @@ in `_viz_cli.py` only fires when `data.fits` is absent — it never deletes a tr
 - **plot API** — the plotting code in the libraries: `PyAutoLens/autolens/**/plot/`,
   `PyAutoGalaxy/autogalaxy/**/plot/`, `PyAutoArray/autoarray/plot/` (library changes go through
   the normal library workflow, then this repo is re-rendered).
-- **script** — the producer in `scripts/<domain>/visualization.py` (dataset, model, source types).
+- **script** — the producer in `scripts/<domain>/visualization.py` (dataset, model, source
+  types) and its `true_models/` / simulator.
 
 ## Eyes contracts
 
@@ -142,7 +193,7 @@ python gallery/gallery_build.py --check
 pytest scripts/misc/test -q
 ```
 
-plus `lychee` on every `*.md`, then both producers run for real followed by
+plus `lychee` on every `*.md`, then every producer runs for real followed by
 `gallery_build.py --check` (a PR that changes the figure set without regenerating `GALLERY.md`
 fails). `render.yml` (manual + `repository_dispatch: pyautolens-release`) re-renders with the
 released PyPI stack, commits PNGs + `GALLERY.md` + `gallery/viz_manifest.yaml` back as

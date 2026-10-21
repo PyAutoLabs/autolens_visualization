@@ -181,9 +181,10 @@ def render_markdown(manifest: dict, version: str) -> str:
         "",
         f"{VERSION_LINE_PREFIX} `{version}` · {n_png} figures.",
         "",
-        "Every figure below is what `VisualizerImaging` / `VisualizerInterferometer` write "
-        "to a model-fit's `image/` folder, rendered on this repo's datasets with the true "
-        "model. See [README.md](README.md) for how to improve one.",
+        "Every figure below is what the PyAutoLens visualizers (`VisualizerImaging`, "
+        "`VisualizerInterferometer`, `VisualizerPoint`, `VisualizerWeak`) write to a "
+        "model-fit's `image/` folder, rendered on this repo's datasets with the true model. "
+        "See [README.md](README.md) for how to improve one.",
         "",
         "## Contents",
         "",

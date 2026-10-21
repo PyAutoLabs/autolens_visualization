@@ -20,19 +20,36 @@ Until now, the only way to see what a PyAutoLens figure looks like was to run a 
 and open its `output/` folder. This repo keeps the most up-to-date rendering of **every**
 visualizer output in git — on realistic HST-scale imaging and SMA-scale interferometer data — so
 there is one place to see every figure, judge it, and improve it (by hand or in an AI chat
-pointed at the plotting source) without re-running anything. Imaging and interferometer today;
-multi-galaxy, group and cluster scale next.
+pointed at the plotting source) without re-running anything.
 
-Each figure is exactly what `VisualizerImaging` / `VisualizerInterferometer` write to a fit's
-`image/` folder, rendered with the simulator's true model for a parametric (SersicCore) source and
-a Delaunay pixelized source, with every toggle in
-[`config/visualize/plots.yaml`](config/visualize/plots.yaml) switched on.
+Every PyAutoLens dataset type has one folder under `scripts/` with one `visualization.py`,
+mirroring `autolens_workspace` (a variant gets its own folder):
+
+| Domain | Producer | Figures |
+|--------|-------------|---------|
+| `imaging` | `visualization.py` | full set: parametric + Delaunay source |
+| `interferometer` | `visualization.py` | full set: parametric + Delaunay source |
+| `interferometer_datacube` | `visualization.py` | `dataset.png` + `fit.png` per channel |
+| `point_source_image_chi_squared` | `visualization.py` | `dataset.png` + `fit.png` |
+| `point_source_source_chi_squared` | `visualization.py` | `dataset.png` + `fit.png` |
+| `multi_galaxy` | `visualization.py` | `dataset.png` + `fit.png` |
+| `group` | `visualization.py` | `dataset.png` + `fit.png` |
+| `cluster` | `visualization.py` | `dataset.png` + `fit.png` per point-source plane |
+| `multi_dataset` | `visualization.py` | `dataset.png` + `fit.png` per band |
+| `weak` | `visualization.py` | `dataset.png` + `fit.png` |
+
+Each figure is exactly what the visualizers (`VisualizerImaging`, `VisualizerInterferometer`,
+`VisualizerPoint`, `VisualizerWeak`) write to a fit's `image/` folder, rendered with the
+simulator's true model, with every toggle in
+[`config/visualize/plots.yaml`](config/visualize/plots.yaml) switched on. Imaging and
+interferometer render every figure; the other types track just the dataset and fit figures for
+now (several reuse galaxy-scale plots — bespoke point, cluster and weak figures come next).
 
 ## Render locally
 
 ```bash
 source activate.sh                  # library checkouts on PYTHONPATH (see the file)
-bash gallery/gallery_run.sh --all   # run both producers, rebuild GALLERY.md + manifest, --check
+bash gallery/gallery_run.sh --all   # run every producer, rebuild GALLERY.md + manifest, --check
 ```
 
 Or one domain: `python scripts/imaging/visualization.py`, then `python gallery/gallery_build.py`.
@@ -44,10 +61,13 @@ result and pings PyAutoEyes (`repository_dispatch: eyes-refresh`) to refresh its
 
 ## Add a domain
 
-- Add a simulator (or instrument preset) under `scripts/misc/simulators/` and track its dataset
-  under `dataset/<domain>/<instrument>/`.
+- Put the true model in `true_models/<name>.py`, add a simulator under
+  `scripts/misc/simulators/` that builds the dataset from it, register it in `_viz_cli.DATASETS`
+  and track its dataset under `dataset/<domain>/<name>/`.
 - Add a flat producer `scripts/<domain>/visualization.py` modelled on
-  [`scripts/imaging/visualization.py`](scripts/imaging/visualization.py).
+  [`scripts/imaging/visualization.py`](scripts/imaging/visualization.py). One folder per dataset type,
+  each with exactly one `visualization.py`; a variant gets its own top-level folder (e.g.
+  `point_source_image_chi_squared`, `interferometer_datacube`).
 - Run `bash gallery/gallery_run.sh --all` and commit the PNGs + `GALLERY.md` +
   `gallery/viz_manifest.yaml`.
 

@@ -30,11 +30,11 @@ mirroring `autolens_workspace` (a variant gets its own folder):
 | `imaging` | `visualization.py` | full set: parametric + Delaunay source |
 | `interferometer` | `visualization.py` | full set: parametric + Delaunay source |
 | `interferometer_datacube` | `visualization.py` | `dataset.png` + `fit.png` per channel |
-| `point_source_image_chi_squared` | `visualization.py` | `dataset.png` + `fit.png` |
+| `point_source_image_chi_squared` | `visualization.py` | `dataset.png` + `fit.png` + image-with-points pair + `point_solver.png`; `teaching/point_solver.png` + `.gif` (coarse grid) |
 | `point_source_source_chi_squared` | `visualization.py` | `dataset.png` + `fit.png` |
 | `multi_galaxy` | `visualization.py` | `dataset.png` + `fit.png` |
 | `group` | `visualization.py` | `dataset.png` + `fit.png` |
-| `cluster` | `visualization.py` | `dataset.png` + `fit.png` per point-source plane |
+| `cluster` | `visualization.py` | `dataset.png` + `fit.png` + `point_solver.png` per point-source plane |
 | `multi_dataset` | `visualization.py` | `dataset.png` + `fit.png` per band |
 | `weak` | `visualization.py` | `dataset.png` + `fit.png` |
 

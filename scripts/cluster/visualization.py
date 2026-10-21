@@ -2,7 +2,7 @@
 Visualization: Cluster
 ======================
 
-Renders the two figures ``VisualizerPoint`` writes for each point-source dataset of a
+Renders the figures ``VisualizerPoint`` writes for each point-source dataset of a
 multi-plane cluster fit (two point sources at z=1.0 and z=2.0 behind a cluster lens), so the
 latest version of each lives in git (``GALLERY.md``). A cluster model-fit has one
 ``AnalysisPoint`` per point-source dataset (combined in a factor graph), each visualized
@@ -13,14 +13,18 @@ Output tree (wiped at the start of every run)::
 
     scripts/cluster/images/visualization/
         point_0/dataset.png, point_0/fit.png   <- PlotterPoint.dataset_point, PlotterPoint.fit_point
-        point_1/dataset.png, point_1/fit.png
+        point_0/point_solver.png               <- PlotterPoint.point_solver (the model's real
+                                                  multi-plane PointSolver refining onto this
+                                                  source's images, steps 0, 1, 2 and final)
+        point_1/dataset.png, point_1/fit.png, point_1/point_solver.png
 
 **Plotter, not Visualizer.** ``VisualizerPoint.visualize`` also renders the tracer and galaxy
-figures this repo does not track, so this producer calls the same two ``PlotterPoint`` methods the
+figures this repo does not track, so this producer calls the same ``PlotterPoint`` methods the
 visualizer calls (``dataset_point(solver=...)`` in ``visualize_before_fit``;
-``fit_point(quick_update=True)`` in ``visualize``), writing the figures the visualizer would. The
-"Fit Positions" panel draws the tracer's critical curves, which ``fit_point`` computes on a 100x100
-grid covering the solver grid: for this 15-galaxy multi-plane lens that costs ~2 min per dataset.
+``fit_point(quick_update=True)`` and ``point_solver`` in ``visualize``), writing the figures the
+visualizer would. The "Fit Positions" and point-solver panels draw the tracer's critical curves,
+computed once per dataset (as the visualizer does) on a 100x100 grid covering the solver grid: for
+this 15-galaxy multi-plane lens that costs ~2 min per dataset.
 
 The point plotter writes ``dataset_point.png`` (renamed to ``dataset.png``); every other file
 the visualizer writes is deleted.
@@ -62,6 +66,8 @@ conf.instance.push(
 
 import autofit as af
 import autolens as al
+from autolens.imaging.plot.fit_imaging_plots import _compute_critical_curve_lines
+from autolens.lens.plot.critical_curves import critical_curve_grid_from
 from autolens.point.model.plotter import PlotterPoint
 
 from _viz_cli import ensure_dataset, keep_dataset_and_fit
@@ -121,11 +127,22 @@ for i in range(len(tm.SOURCE_REDSHIFTS)):
     t0 = time.perf_counter()
     plotter = PlotterPoint(image_path=paths.image_path, title_prefix=analysis.title_prefix)
     plotter.dataset_point(dataset=analysis.dataset, solver=analysis.solver)
-    plotter.fit_point(
-        fit=analysis.fit_for_visualization(instance=instance),
-        quick_update=True,
+    fit = analysis.fit_for_visualization(instance=instance)
+    ip_lines, ip_colors, sp_lines, sp_colors = _compute_critical_curve_lines(
+        fit.tracer, critical_curve_grid_from(dataset=fit.dataset, solver=solver)
     )
-    keep_dataset_and_fit(point_path, dataset_png="dataset_point.png")
+    plotter.fit_point(
+        fit=fit,
+        quick_update=True,
+        image_plane_lines=ip_lines if ip_lines is not None else [],
+        image_plane_line_colors=ip_colors if ip_lines is not None else [],
+        source_plane_lines=sp_lines,
+        source_plane_line_colors=sp_colors,
+    )
+    plotter.point_solver(fit=fit, image_plane_lines=ip_lines if ip_lines is not None else [])
+    keep_dataset_and_fit(
+        point_path, dataset_png="dataset_point.png", extra_pngs=("point_solver.png",)
+    )
     print(f"visualize [{dataset.name}]: {time.perf_counter() - t0:.1f}s")
 
 n_png = len(list(image_path.rglob("*.png")))

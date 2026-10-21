@@ -8,7 +8,7 @@ rendered_with:
   autogalaxy: 2026.8.17.1
   autoarray: 2026.8.17.1
   autofit: 2026.8.17.1
-figure_count: 66
+figure_count: 68
 figures:
 - file: scripts/cluster/images/visualization/point_0/dataset.png
   producer: scripts/cluster/visualization.py
@@ -370,12 +370,18 @@ figures:
   source: ''
   bytes: 28952
   sha256: 6b52412bb75eab16a3dc4ae4e0a4925d5f23c2ff7ed8bb9a6199f406f201cfed
+- file: scripts/point_source_image_chi_squared/images/visualization/fit_image_with_points.png
+  producer: scripts/point_source_image_chi_squared/visualization.py
+  domain: point_source_image_chi_squared
+  source: ''
+  bytes: 78338
+  sha256: 76b4b2b2ce69bcc2f3d3740c901d04d86ba245f217e5f026f1bbdfc3b9db39bd
 - file: scripts/point_source_image_chi_squared/images/visualization/image_with_points.png
   producer: scripts/point_source_image_chi_squared/visualization.py
   domain: point_source_image_chi_squared
   source: ''
-  bytes: 78200
-  sha256: 5972b44e38db7c42e93a108d53530b83a1103cde5a06989c5947eb9e86871114
+  bytes: 66518
+  sha256: 2653419882e5f55d2afe24b067e8d5c9865081aee51517dc05520a12d1787468
 - file: scripts/point_source_source_chi_squared/images/visualization/dataset.png
   producer: scripts/point_source_source_chi_squared/visualization.py
   domain: point_source_source_chi_squared
@@ -388,12 +394,18 @@ figures:
   source: ''
   bytes: 28823
   sha256: caf49de216f6f80553e6c79b03231fd51ee626bd5939dd6864489e56a134320c
+- file: scripts/point_source_source_chi_squared/images/visualization/fit_image_with_points.png
+  producer: scripts/point_source_source_chi_squared/visualization.py
+  domain: point_source_source_chi_squared
+  source: ''
+  bytes: 75775
+  sha256: 4fee595525a08c3f70f79c7d5e4395b69734c3582d3ddd4343b64a5c210a4f23
 - file: scripts/point_source_source_chi_squared/images/visualization/image_with_points.png
   producer: scripts/point_source_source_chi_squared/visualization.py
   domain: point_source_source_chi_squared
   source: ''
-  bytes: 75639
-  sha256: 76c6fa188a4bb9ca4d66fe95e42429ec7d9c900df85de0e00bae345be68146a0
+  bytes: 66518
+  sha256: 2653419882e5f55d2afe24b067e8d5c9865081aee51517dc05520a12d1787468
 - file: scripts/weak/images/visualization/dataset.png
   producer: scripts/weak/visualization.py
   domain: weak

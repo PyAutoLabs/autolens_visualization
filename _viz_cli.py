@@ -181,8 +181,8 @@ def keep_dataset_and_fit(
     plotter's ``dataset_point.png``); they are renamed to ``dataset.png`` / ``fit.png``. Every
     other file (other PNGs, FITS, CSV, JSON) and any sub-folder is deleted, so the newer
     domains track only the two figures. ``extra_pngs`` names further figures to keep under their
-    own names (e.g. the point plotter's ``image_with_points.png``). Raises if any expected figure
-    is missing.
+    own names (e.g. the point plotter's ``image_with_points.png`` and
+    ``fit_image_with_points.png``). Raises if any expected figure is missing.
     """
     image_dir = Path(image_dir)
     kept = []

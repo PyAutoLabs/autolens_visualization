@@ -99,7 +99,7 @@ DATASETS: dict[str, dict[str, str]] = {
         "type": "cluster",
         "name": "simple",
         "simulator": "cluster",
-        "sentinel": "point_dataset_1.json",
+        "sentinel": "data.fits",
     },
     "multi_dataset": {
         "type": "multi_dataset",
@@ -178,6 +178,7 @@ def keep_dataset_and_fit(
     dataset_png: str = "dataset.png",
     fit_png: str = "fit.png",
     extra_pngs: tuple[str, ...] = (),
+    keep_dirs: tuple[str, ...] = (),
 ) -> list[Path]:
     """Reduce a visualizer's output folder to exactly ``dataset.png`` + ``fit.png``.
 
@@ -186,7 +187,8 @@ def keep_dataset_and_fit(
     other file (other PNGs, FITS, CSV, JSON) and any sub-folder is deleted, so the newer
     domains track only the two figures. ``extra_pngs`` names further figures to keep under their
     own names (e.g. the point plotter's ``image_with_points.png`` and
-    ``fit_image_with_points.png``). Raises if any expected figure is missing.
+    ``fit_image_with_points.png``). ``keep_dirs`` names sub-folders to keep (e.g. the cluster
+    producer's per-source ``point_<i>/`` folders). Raises if any expected figure is missing.
     """
     image_dir = Path(image_dir)
     kept = []
@@ -203,6 +205,7 @@ def keep_dataset_and_fit(
         if not src.is_file():
             raise FileNotFoundError(f"expected visualizer output {src} was not written")
         kept.append(src)
+    kept += [image_dir / name for name in keep_dirs]
     for p in sorted(image_dir.iterdir()):
         if p in kept:
             continue

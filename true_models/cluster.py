@@ -14,6 +14,10 @@ SOURCE_REDSHIFTS = [1.0, 2.0]
 SOURCE_CENTRES = [(0.3, 0.5), (-0.8, 1.2)]
 POSITION_NOISE = 0.005
 
+# The cluster CCD image (visualization only): the solver grid's extent and sampling.
+IMAGE_SHAPE_NATIVE = (400, 400)
+IMAGE_PIXEL_SCALES = 0.2
+
 MAIN_LENS_CENTRES = [(0.0, 0.0), (10.0, 8.0)]
 MAIN_LENS_DPIE = [(0.0, 20.0, 330.0), (0.0, 12.0, 210.0)]  # (r_core, r_cut, sigma)
 MAIN_LENS_SERSIC = [(1.5, 3.0, 4.0), (0.8, 1.5, 3.5)]  # (intensity, effective_radius, n)

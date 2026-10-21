@@ -6,12 +6,19 @@ Simulates the point-source datasets of ``true_models.cluster`` — the multiple 
 point sources at z=1.0 (``point_0``) and z=2.0 (``point_1``) behind a cluster lens (BCG,
 satellite, ten scaling-relation members and an NFW host halo) — and writes
 ``point_dataset_0.json``, ``point_dataset_1.json`` and ``tracer.json`` into
-``dataset/cluster/simple/``.
+``dataset/cluster/simple/``, plus ``data.fits``: a CCD image of the cluster (lens and member light,
+the two lensed sources' arcs) over the solver extent, which the producer passes to
+``AnalysisPoint(image=...)`` so the cluster ``image_with_points.png`` /
+``fit_image_with_points.png`` render. The image is visualization only: it never enters the
+point-source likelihood.
 
 Adapted from ``autolens_workspace/scripts/cluster/simulator.py``: same galaxies and 5 mas
 position noise (the workspace adds none; seeded here), solved with the NumPy ``PointSolver`` on
-a coarser 400x400 @ 0.2" grid instead of the JIT-compiled 800x800 @ 0.1" one. The workspace's
-1000x1000 imaging, CSV tables and PNG previews are not written (the producer fits positions).
+a coarser 400x400 @ 0.2" grid instead of the JIT-compiled 800x800 @ 0.1" one. The image uses the
+workspace's imaging settings (Gaussian PSF of one pixel, 300 s exposure, sky 0.1, Poisson noise,
+seeded) on that same 400x400 @ 0.2" grid instead of 1000x1000 @ 0.1", so the tracked FITS stays
+small; only ``data.fits`` is written (the figures need no noise-map or PSF). CSV tables and PNG
+previews are not written.
 
 Usage
 -----
@@ -40,6 +47,7 @@ _REPO_ROOT = _repo_root()
 
 def simulate(output_root: Path | None = None) -> Path:
     import autolens as al
+    import autolens.plot as aplt
     import numpy as np
 
     from true_models import cluster as tm
@@ -72,6 +80,25 @@ def simulate(output_root: Path | None = None) -> Path:
         print(f"  point_{i} (z={z}): {len(positions)} images")
 
     al.output_to_json(obj=tracer, file_path=dataset_path / "tracer.json")
+
+    grid = al.Grid2D.uniform(
+        shape_native=tm.IMAGE_SHAPE_NATIVE, pixel_scales=tm.IMAGE_PIXEL_SCALES
+    )
+    psf = al.Convolver.from_gaussian(
+        shape_native=(11, 11),
+        sigma=tm.IMAGE_PIXEL_SCALES,
+        pixel_scales=tm.IMAGE_PIXEL_SCALES,
+    )
+    simulator = al.SimulatorImaging(
+        exposure_time=300.0,
+        psf=psf,
+        background_sky_level=0.1,
+        add_poisson_noise_to_data=True,
+        noise_seed=1,
+    )
+    imaging = simulator.via_tracer_from(tracer=tracer, grid=grid)
+    aplt.fits_imaging(dataset=imaging, data_path=dataset_path / "data.fits", overwrite=True)
+    print(f"  data.fits: {tm.IMAGE_SHAPE_NATIVE} @ {tm.IMAGE_PIXEL_SCALES}\"/px")
     print(f"  wrote {dataset_path}")
     return dataset_path
 

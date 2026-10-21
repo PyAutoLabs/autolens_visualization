@@ -2,37 +2,36 @@
 Visualization: Cluster
 ======================
 
-Renders the figures ``VisualizerPoint`` writes for each point-source dataset of a
-multi-plane cluster fit (two point sources at z=1.0 and z=2.0 behind a cluster lens), so the
-latest version of each lives in git (``GALLERY.md``). A cluster model-fit has one
-``AnalysisPoint`` per point-source dataset (combined in a factor graph), each visualized
-separately, so this producer calls the visualizer once per dataset. The figures are the
-generic point-source plots — bespoke cluster figures are a follow-up.
+Renders the figures ``VisualizerPoint`` writes during a cluster model-fit (two point sources at
+z=1.0 and z=2.0 behind a multi-plane cluster lens), so the latest version of each lives in git
+(``GALLERY.md``). A cluster model-fit has one ``AnalysisPoint`` per point-source dataset,
+combined in a factor graph: each dataset's own figures are written to its own folder, and the
+figures of every source together (where all sources are visible) to the top-level folder.
 
 Output tree (wiped at the start of every run)::
 
     scripts/cluster/images/visualization/
-        point_0/dataset.png, point_0/fit.png   <- PlotterPoint.dataset_point, PlotterPoint.fit_point
-        point_0/point_solver.png               <- PlotterPoint.point_solver (the model's real
-                                                  multi-plane PointSolver refining onto this
-                                                  source's images, steps 0, 1, 2 and final)
-        point_1/dataset.png, point_1/fit.png, point_1/point_solver.png
+        dataset.png                <- VisualizerPoint.visualize_before_fit_combined:
+                                      "Dataset Positions" of every source (dataset_point.png)
+        image_with_points.png      <- every source's positions over the cluster image
+        fit.png                    <- VisualizerPoint.visualize_combined: "Fit Positions" of
+                                      every source, each source's critical curves at its own z
+        fit_per_image.png          <- one row per source: residual ranking (range shared by
+                                      both sources) / image-plane zoom / source plane
+        fit_image_with_points.png  <- every source's positions and curves over the image
+        point_0/ point_1/          <- each dataset's own figures (visualize_before_fit +
+                                      visualize): dataset.png, image_with_points.png, fit.png,
+                                      fit_per_image.png, fit_image_with_points.png and
+                                      point_solver.png (the model's real multi-plane PointSolver
+                                      refining onto this source's images)
 
-**Plotter, not Visualizer.** ``VisualizerPoint.visualize`` also renders the tracer and galaxy
-figures this repo does not track, so this producer calls the same ``PlotterPoint`` methods the
-visualizer calls (``dataset_point(solver=...)`` in ``visualize_before_fit``;
-``fit_point(quick_update=True)`` and ``point_solver`` in ``visualize``), writing the figures the
-visualizer would. The "Fit Positions" and point-solver panels draw the tracer's critical curves,
-computed once per dataset (as the visualizer does) on a 100x100 grid covering the solver grid: for
-this 15-galaxy multi-plane lens that costs ~2 min per dataset. The "Fit Source Plane" panel of
-``fit.png`` draws the caustics of the point's own plane (``point_0`` is at z=1, in front of the
-last plane), computed separately for a point not in the last plane.
+The per-dataset ``visualize`` also writes the tracer and galaxy figures, which this repo does
+not track: they (and every other untracked file) are deleted, and ``dataset_point.png`` is
+renamed ``dataset.png``.
 
-The point plotter writes ``dataset_point.png`` (renamed to ``dataset.png``); every other file
-the visualizer writes is deleted.
-
-Dataset: ``dataset/cluster/simple`` (``point_0``: 5 images, ``point_1``: 2 images, 5 mas noise),
-from ``scripts/misc/simulators/cluster.py``. The model is that simulator's TRUE model
+Dataset: ``dataset/cluster/simple`` (``point_0``: 5 images, ``point_1``: 2 images, 5 mas noise,
+and ``data.fits``: the cluster image, visualization only), from
+``scripts/misc/simulators/cluster.py``. The model is that simulator's TRUE model
 (``true_models/cluster.py``), fitted with the source-plane chi-squared
 (``FitPositionsSource``) the workspace cluster example uses, with free-centre point sources.
 
@@ -68,9 +67,7 @@ conf.instance.push(
 
 import autofit as af
 import autolens as al
-from autolens.imaging.plot.fit_imaging_plots import _compute_critical_curve_lines
-from autolens.lens.plot.critical_curves import critical_curve_grid_from
-from autolens.point.model.plotter import PlotterPoint
+from autolens.point.model.visualizer import VisualizerPoint
 
 from _viz_cli import ensure_dataset, keep_dataset_and_fit
 from true_models import cluster as tm
@@ -97,6 +94,16 @@ solver = al.PointSolver.for_grid(
 )
 
 """
+__Cluster Image__
+
+Visualization only: it is passed to every ``AnalysisPoint`` for the image-with-points figures and
+never enters the point-source likelihood.
+"""
+image = al.Array2D.from_fits(
+    file_path=dataset_path / "data.fits", hdu=0, pixel_scales=tm.IMAGE_PIXEL_SCALES
+)
+
+"""
 __Paths__
 """
 image_path = REPO_ROOT / "scripts" / "cluster" / "images" / STEM
@@ -107,18 +114,22 @@ image_path.mkdir(parents=True)
 scratch_root = REPO_ROOT / "output" / "visualization" / "cluster" / STEM
 if scratch_root.exists():
     shutil.rmtree(scratch_root)
+scratch_root.mkdir(parents=True)
 
 """
 __Per Point-Source Dataset__
 """
+analyses = []
 for i in range(len(tm.SOURCE_REDSHIFTS)):
     dataset = al.from_json(file_path=dataset_path / f"point_dataset_{i}.json")
     analysis = al.AnalysisPoint(
         dataset=dataset,
         solver=solver,
+        image=image,
         fit_positions_cls=al.FitPositionsSource,
         use_jax=False,
     )
+    analyses.append(analysis)
 
     point_path = image_path / dataset.name
     point_path.mkdir(parents=True)
@@ -127,25 +138,49 @@ for i in range(len(tm.SOURCE_REDSHIFTS)):
     paths = SimpleNamespace(image_path=point_path, output_path=scratch)
 
     t0 = time.perf_counter()
-    plotter = PlotterPoint(image_path=paths.image_path, title_prefix=analysis.title_prefix)
-    plotter.dataset_point(dataset=analysis.dataset, solver=analysis.solver)
-    fit = analysis.fit_for_visualization(instance=instance)
-    ip_lines, ip_colors, sp_lines, sp_colors = _compute_critical_curve_lines(
-        fit.tracer, critical_curve_grid_from(dataset=fit.dataset, solver=solver)
+    VisualizerPoint.visualize_before_fit(analysis=analysis, paths=paths, model=model)
+    VisualizerPoint.visualize(
+        analysis=analysis,
+        paths=paths,
+        instance=instance,
+        during_analysis=False,
+        quick_update=False,
     )
-    plotter.fit_point(
-        fit=fit,
-        quick_update=True,
-        image_plane_lines=ip_lines if ip_lines is not None else [],
-        image_plane_line_colors=ip_colors if ip_lines is not None else [],
-        source_plane_lines=sp_lines,
-        source_plane_line_colors=sp_colors,
-    )
-    plotter.point_solver(fit=fit, image_plane_lines=ip_lines if ip_lines is not None else [])
     keep_dataset_and_fit(
-        point_path, dataset_png="dataset_point.png", extra_pngs=("point_solver.png",)
+        point_path,
+        dataset_png="dataset_point.png",
+        extra_pngs=(
+            "fit_per_image.png",
+            "image_with_points.png",
+            "fit_image_with_points.png",
+            "point_solver.png",
+        ),
     )
     print(f"visualize [{dataset.name}]: {time.perf_counter() - t0:.1f}s")
+
+"""
+__All Sources__
+
+The figures of every source together, as ``VisualizerPoint`` writes them to the top-level image
+folder of a factor-graph fit.
+"""
+t0 = time.perf_counter()
+paths = SimpleNamespace(image_path=image_path, output_path=scratch_root)
+VisualizerPoint.visualize_before_fit_combined(analyses=analyses, paths=paths, model=model)
+VisualizerPoint.visualize_combined(
+    analyses=analyses,
+    paths=paths,
+    instance=[instance] * len(analyses),
+    during_analysis=False,
+    quick_update=False,
+)
+keep_dataset_and_fit(
+    image_path,
+    dataset_png="dataset_point.png",
+    extra_pngs=("fit_per_image.png", "image_with_points.png", "fit_image_with_points.png"),
+    keep_dirs=tuple(analysis.dataset.name for analysis in analyses),
+)
+print(f"visualize [all sources]: {time.perf_counter() - t0:.1f}s")
 
 n_png = len(list(image_path.rglob("*.png")))
 print(f"Wrote {n_png} PNGs under {image_path.relative_to(REPO_ROOT)}")

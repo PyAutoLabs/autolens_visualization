@@ -69,13 +69,23 @@ the full figure set. Every other producer tracks only `dataset.png` and `fit.png
 everything else. Producers with several sub-datasets write one pair per sub-folder
 (`multi_dataset` per band, the datacube per channel, `cluster` per point-source plane). Many
 of these figures are the galaxy-scale plots and look poor on point / cluster / weak data —
-bespoke figures are a follow-up through the Eyes dashboard. `cluster` calls the two
+bespoke figures are a follow-up through the Eyes dashboard. `cluster` calls the
 `PlotterPoint` methods directly instead of `VisualizerPoint`, skipping the untracked tracer and
-galaxy figures; the "Fit Positions" panel still draws the critical curves, which cost ~2 min per
-dataset on the 15-galaxy multi-plane lens (the PNGs match the visualizer's).
+galaxy figures; the "Fit Positions" and point-solver panels still draw the critical curves, which
+cost ~2 min per dataset on the 15-galaxy multi-plane lens (the PNGs match the visualizer's).
+
+**Point solver.** `point_source_image_chi_squared` (via `visualize(quick_update=False)`) and
+`cluster` (per plane) also keep `point_solver.png`: the model's real `PointSolver` refining onto
+its images (`fit_point_dataset: subplot_point_solver`, on in this repo's `plots.yaml`, off in
+the library). `point_source_image_chi_squared/images/visualization/teaching/` holds the same
+figure on a coarse teaching grid from `aplt.plot_point_solver`, plus its looping animation
+`point_solver.gif`.
 
 **What is tracked.** PNG figures under `scripts/<domain>/images/**`, `GALLERY.md` and
-`gallery/viz_manifest.yaml`. The FITS /
+`gallery/viz_manifest.yaml`, plus the teaching GIF animation
+(`point_source_image_chi_squared/images/visualization/teaching/point_solver.gif`). The manifest
+and `GALLERY.md` list PNGs only (the PyAutoEyes read contract), so the GIF is tracked beside its
+PNG still but is not a manifest entry; `render.yml` commits it with the PNGs. The FITS /
 CSV / JSON data products the visualizers also write are gitignored (bulky, not viewable on
 GitHub), as are `output/` and `dataset/**/lensed_source.fits`.
 

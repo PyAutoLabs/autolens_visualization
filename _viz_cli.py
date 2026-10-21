@@ -220,12 +220,14 @@ EYES_SCRATCH_ENV = "PYAUTO_EYES_SCRATCH"
 
 
 def mirror_to_scratch(domains: list[str] | None = None) -> Path | None:
-    """Copy freshly rendered PNGs to the opt-in Eyes scratch folder; return its lib folder.
+    """Copy freshly rendered PNGs (and GIF animations) to the opt-in Eyes scratch folder.
+
+    Returns the scratch lib folder.
 
     For on-the-fly figure review before any PR or CI. When ``$PYAUTO_EYES_SCRATCH`` is
     unset this is a silent no-op returning ``None`` (so CI and other machines are
     untouched). Otherwise each domain's ``$PYAUTO_EYES_SCRATCH/<EYES_LIB>/<domain>/`` is
-    deleted and refilled with every PNG under ``scripts/<domain>/images/`` (subpaths
+    deleted and refilled with every PNG and GIF under ``scripts/<domain>/images/`` (subpaths
     below ``images/`` kept), so no stale figure survives a re-render. ``domains=None``
     mirrors every domain that has an ``images/`` folder (``misc`` never does).
     """
@@ -243,12 +245,12 @@ def mirror_to_scratch(domains: list[str] | None = None) -> Path | None:
             continue
         dest = lib_dir / domain
         shutil.rmtree(dest, ignore_errors=True)
-        pngs = sorted(images.rglob("*.png"))
-        for png in pngs:
-            target = dest / png.relative_to(images)
+        figures = sorted([*images.rglob("*.png"), *images.rglob("*.gif")])
+        for figure in figures:
+            target = dest / figure.relative_to(images)
             target.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(png, target)
-        print(f"  [eyes-scratch] {len(pngs)} PNGs -> {dest}")
+            shutil.copy2(figure, target)
+        print(f"  [eyes-scratch] {len(figures)} figures (PNG/GIF) -> {dest}")
     return lib_dir
 
 

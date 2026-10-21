@@ -62,7 +62,8 @@ fit_interferometer:                        # Settings for plots of fits to inter
 point_dataset:                             # Settings for plots of point source datasets (e.g. PointDatasetPlotter).
   subplot_dataset: true                    # Plot subplot containing all dataset quantities (e.g. the data, noise-map, etc.)?
 
-fit_point_dataset: {}                      # Settings for plots of fits to point source datasets (e.g. FitPointDatasetPlotter).
+fit_point_dataset:                         # Settings for plots of fits to point source datasets (e.g. FitPointDatasetPlotter).
+  subplot_point_solver: true               # PointSolver refinement steps at the best fit (point_solver.png); off by default in the library.
 
 weak_dataset:                              # Settings for plots of weak lensing shear catalogues (e.g. PlotterWeak).
   subplot_dataset: true                    # Plot subplot containing all dataset quantities (e.g. the shear field, noise-map, etc.)?

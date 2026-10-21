@@ -15,12 +15,12 @@ Output tree (wiped at the start of every run)::
         point_0/dataset.png, point_0/fit.png   <- PlotterPoint.dataset_point, PlotterPoint.fit_point
         point_1/dataset.png, point_1/fit.png
 
-**Plotter, not Visualizer.** ``VisualizerPoint.visualize`` computes the tracer's critical curves
-and caustics on a 100x100 grid over the dataset extent before plotting, which for this 15-galaxy
-multi-plane lens costs ~100 s per run (measured 35 s + 67 s) — and the point-source fit subplot
-does not draw those curves. So this producer calls the same two ``PlotterPoint`` methods the
-visualizer calls (``dataset_point`` in ``visualize_before_fit``; ``fit_point(quick_update=True)``
-in ``visualize``) with empty curve lists, writing byte-for-byte the figures the visualizer would.
+**Plotter, not Visualizer.** ``VisualizerPoint.visualize`` also renders the tracer and galaxy
+figures this repo does not track, so this producer calls the same two ``PlotterPoint`` methods the
+visualizer calls (``dataset_point(solver=...)`` in ``visualize_before_fit``;
+``fit_point(quick_update=True)`` in ``visualize``), writing the figures the visualizer would. The
+"Fit Positions" panel draws the tracer's critical curves, which ``fit_point`` computes on a 100x100
+grid covering the solver grid: for this 15-galaxy multi-plane lens that costs ~2 min per dataset.
 
 The point plotter writes ``dataset_point.png`` (renamed to ``dataset.png``); every other file
 the visualizer writes is deleted.
@@ -120,14 +120,10 @@ for i in range(len(tm.SOURCE_REDSHIFTS)):
 
     t0 = time.perf_counter()
     plotter = PlotterPoint(image_path=paths.image_path, title_prefix=analysis.title_prefix)
-    plotter.dataset_point(dataset=analysis.dataset)
+    plotter.dataset_point(dataset=analysis.dataset, solver=analysis.solver)
     plotter.fit_point(
         fit=analysis.fit_for_visualization(instance=instance),
         quick_update=True,
-        image_plane_lines=[],
-        image_plane_line_colors=[],
-        source_plane_lines=[],
-        source_plane_line_colors=[],
     )
     keep_dataset_and_fit(point_path, dataset_png="dataset_point.png")
     print(f"visualize [{dataset.name}]: {time.perf_counter() - t0:.1f}s")

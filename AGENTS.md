@@ -70,9 +70,9 @@ everything else. Producers with several sub-datasets write one pair per sub-fold
 (`multi_dataset` per band, the datacube per channel, `cluster` per point-source plane). Many
 of these figures are the galaxy-scale plots and look poor on point / cluster / weak data —
 bespoke figures are a follow-up through the Eyes dashboard. `cluster` calls the two
-`PlotterPoint` methods directly instead of `VisualizerPoint`: the visualizer's critical-curve
-pre-pass costs ~100 s on the 15-galaxy multi-plane lens and the point fit subplot never draws
-the curves (the PNGs are byte-identical).
+`PlotterPoint` methods directly instead of `VisualizerPoint`, skipping the untracked tracer and
+galaxy figures; the "Fit Positions" panel still draws the critical curves, which cost ~2 min per
+dataset on the 15-galaxy multi-plane lens (the PNGs match the visualizer's).
 
 **What is tracked.** PNG figures under `scripts/<domain>/images/**`, `GALLERY.md` and
 `gallery/viz_manifest.yaml`. The FITS /

@@ -2,25 +2,27 @@
 Visualization: Point Source (Source-Plane Chi-Squared)
 ======================================================
 
-Renders the two figures ``VisualizerPoint`` writes for a point-source fit that uses the
+Renders the figures ``VisualizerPoint`` writes for a point-source fit that uses the
 source-plane chi-squared (``FitPositionsSource``: the observed positions are ray-traced to the
-source plane and compared with the point source's centre, magnification-weighted), so the
+source plane and compared with the point source's centre, jacobian-weighted by default), so the
 latest version of each lives in git (``GALLERY.md``).
 
 Output tree (wiped at the start of every run)::
 
     scripts/point_source_source_chi_squared/images/visualization/
         dataset.png   <- visualize_before_fit (the plotter writes dataset_point.png; renamed)
-        fit.png       <- visualize(quick_update=True): Fit Positions + Fit Source Plane (the
-                         traced positions with the sigma/|mu| circles the magnification
-                         chi-squared uses)
+        fit.png       <- visualize: Fit Positions (observed positions and the critical
+                         curves; a source-plane fit has no image-plane model positions)
+        fit_per_image.png <- visualize: residual ranking by the fit's own per-image
+                         source-plane chi / image-plane zoom / Fit Source Plane (the traced
+                         positions with the A.sigma ellipses the jacobian chi-squared uses)
         image_with_points.png     <- visualize_before_fit: the observed positions over
                                      ``data.fits`` (dataset only, no model)
-        fit_image_with_points.png <- visualize(quick_update=True): the observed
+        fit_image_with_points.png <- visualize: the observed
                                      positions and critical curves over ``data.fits`` (a
                                      source-plane fit has no image-plane model positions)
 
-Every other file the visualizer writes is deleted: this domain tracks only these four
+Every other file the visualizer writes is deleted: this domain tracks only these five
 figures.
 
 Dataset: ``dataset/point_source/simple`` (four image-plane positions, 5 mas noise; shared by
@@ -132,12 +134,12 @@ VisualizerPoint.visualize(
     paths=paths,
     instance=model.instance_from_prior_medians(),
     during_analysis=False,
-    quick_update=True,
+    quick_update=False,
 )
 keep_dataset_and_fit(
     image_path,
     dataset_png="dataset_point.png",
-    extra_pngs=("image_with_points.png", "fit_image_with_points.png"),
+    extra_pngs=("fit_per_image.png", "image_with_points.png", "fit_image_with_points.png"),
 )
 print(f"visualize: {time.perf_counter() - t0:.1f}s")
 print(

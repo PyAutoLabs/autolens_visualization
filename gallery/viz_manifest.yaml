@@ -2,7 +2,7 @@
 # the PyAutoEyes dashboard. Do not edit by hand: rerun
 # `bash gallery/gallery_run.sh --all` (or `python gallery/gallery_build.py`).
 schema: 1
-generated: '2026-10-21'
+generated: '2026-10-22'
 rendered_with:
   autolens: 2026.8.17.1
   autogalaxy: 2026.8.17.1
@@ -74,8 +74,8 @@ figures:
   producer: scripts/cluster/visualization.py
   domain: cluster
   source: point_0
-  bytes: 640670
-  sha256: 6d04d62929fce315d9557e80de3445c8b623e239440aa8520cb43b127f1591b6
+  bytes: 1612341
+  sha256: aee2ad2ec7852ed1a8830806dea79300488bfc16bacf1d3f2ba095a74f9b2c76
 - file: scripts/cluster/images/visualization/point_1/dataset.png
   producer: scripts/cluster/visualization.py
   domain: cluster
@@ -110,8 +110,8 @@ figures:
   producer: scripts/cluster/visualization.py
   domain: cluster
   source: point_1
-  bytes: 625185
-  sha256: 79a8a96eead5eb2399ac70140ab5b1276df739491fceda63d49160df6815652c
+  bytes: 498835
+  sha256: cd6d587de9c7075e5ae3cab6d05a54dcc041b1be0b67ef1d5c321ce386cc98a9
 - file: scripts/group/images/visualization/dataset.png
   producer: scripts/group/visualization.py
   domain: group
@@ -470,14 +470,14 @@ figures:
   producer: scripts/point_source_image_chi_squared/visualization.py
   domain: point_source_image_chi_squared
   source: ''
-  bytes: 809232
-  sha256: b6a8909ff738ac83d6344d23bba9828176a0a80205aaf12c46a11b300189c70d
+  bytes: 1119668
+  sha256: c9d107b92a4813f65c96c421801106117153ffa3abe70a927c448e2e7f581930
 - file: scripts/point_source_image_chi_squared/images/visualization/teaching/point_solver.png
   producer: scripts/point_source_image_chi_squared/visualization.py
   domain: point_source_image_chi_squared
   source: teaching
-  bytes: 495158
-  sha256: 84f0312c1415db43b8d8b901a2977a24d706697df70523aef122744a7e00a451
+  bytes: 439486
+  sha256: fdeffd50c2645c42cd657736cedfaa7156f630e53f73db5fd545370f124d8e1a
 - file: scripts/point_source_source_chi_squared/images/visualization/dataset.png
   producer: scripts/point_source_source_chi_squared/visualization.py
   domain: point_source_source_chi_squared

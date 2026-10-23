@@ -2,521 +2,521 @@
 # the PyAutoEyes dashboard. Do not edit by hand: rerun
 # `bash gallery/gallery_run.sh --all` (or `python gallery/gallery_build.py`).
 schema: 1
-generated: '2026-10-22'
+generated: '2026-10-23'
 rendered_with:
-  autolens: 2026.8.17.1
-  autogalaxy: 2026.8.17.1
-  autoarray: 2026.8.17.1
-  autofit: 2026.8.17.1
+  autolens: 2026.10.23.1
+  autogalaxy: 2026.10.23.1
+  autoarray: 2026.10.23.1
+  autofit: 2026.10.23.1
 figure_count: 85
 figures:
 - file: scripts/cluster/images/visualization/dataset.png
   producer: scripts/cluster/visualization.py
   domain: cluster
   source: ''
-  bytes: 46044
-  sha256: 33057e5dfca33bc3680c6c97be5eb49681b27fc6571a6511f1ed1cf626aea5dc
+  bytes: 43861
+  sha256: fcc23cc31b40f2c67567a48c16125790e1ae62e15c9b28a77d9a2c3b95a25b21
 - file: scripts/cluster/images/visualization/fit.png
   producer: scripts/cluster/visualization.py
   domain: cluster
   source: ''
-  bytes: 93568
-  sha256: ee1c998a1616b822ea2f73c769dc2961a6a3ea64f319b96027dc656a6e4d953d
+  bytes: 91340
+  sha256: a4732cd82dff6617541156336c45f88966562f6c5074cf78788f94b3e371eb10
 - file: scripts/cluster/images/visualization/fit_image_with_points.png
   producer: scripts/cluster/visualization.py
   domain: cluster
   source: ''
-  bytes: 1583787
-  sha256: fbe068f345d919dc2f221e1829d43dc25abea2e6e3464dcd9c14d44c507bfc2a
+  bytes: 1604197
+  sha256: 612ade07a0d95bf3db87bdf63c8c09bfb0fd1f2a20c9ec392a231ee4f6886eed
 - file: scripts/cluster/images/visualization/fit_per_image.png
   producer: scripts/cluster/visualization.py
   domain: cluster
   source: ''
-  bytes: 298219
-  sha256: 208e1e6bc10d4f23f2c39c856e5ca4a038070d7651c9a8c16a6b596727543e8d
+  bytes: 310322
+  sha256: ee89f8a8310901093b14bd60300c21c741341a65f0644aeafd74bb4b7c66eb12
 - file: scripts/cluster/images/visualization/image_with_points.png
   producer: scripts/cluster/visualization.py
   domain: cluster
   source: ''
-  bytes: 1585001
-  sha256: 43cf4ef485735a9166f7531a499c9242322034c7f54c031eb96ebcef8ab6fb8c
+  bytes: 1605253
+  sha256: df8a3c174b6633b3f3059ae8cedff4ec27043ebf7b3559dc0efdd68095f9ca80
 - file: scripts/cluster/images/visualization/point_0/dataset.png
   producer: scripts/cluster/visualization.py
   domain: cluster
   source: point_0
-  bytes: 42773
-  sha256: 2993359569e579c8ff8b422e28ce2abd1a6c6175c4477410caffa1ab18b22d89
+  bytes: 38917
+  sha256: e466350f5d0cf211e8565f31331ebf1543da073f7916917b9b4401c2a589b650
 - file: scripts/cluster/images/visualization/point_0/fit.png
   producer: scripts/cluster/visualization.py
   domain: cluster
   source: point_0
-  bytes: 58399
-  sha256: 68d8da40dfea98f35e9047b7a1d2f2655b6cbef569fac2cc013e6df1376ac903
+  bytes: 55395
+  sha256: 5aa60af40fa7cc03947610df7af5340e12188c5df919a841fb3febffdac98bb3
 - file: scripts/cluster/images/visualization/point_0/fit_image_with_points.png
   producer: scripts/cluster/visualization.py
   domain: cluster
   source: point_0
-  bytes: 1597458
-  sha256: 4e934c2bc9cb8554d36c6c0e1a26a132c4e18ffea3808f430598909f75189f83
+  bytes: 1616534
+  sha256: 84efa16a5a8a026f7da42ac4a05b55ae2786e21b8fbd583f5a07e08166dfe46e
 - file: scripts/cluster/images/visualization/point_0/fit_per_image.png
   producer: scripts/cluster/visualization.py
   domain: cluster
   source: point_0
-  bytes: 150681
-  sha256: 361f5948ebfb303b12a8ae808fc01f1fa92e3df55c51513cc625bcd5882ca82f
+  bytes: 159605
+  sha256: 558a72bfa017ac4eca3de9ce2873ae0dd1433d1f57e652e71b22d71e2d14712a
 - file: scripts/cluster/images/visualization/point_0/image_with_points.png
   producer: scripts/cluster/visualization.py
   domain: cluster
   source: point_0
-  bytes: 1594350
-  sha256: f11609f6c0faa6a5ed154ae8b80e1057b36701e2dfb504890792cdb540f161b3
+  bytes: 1612913
+  sha256: 156a566c065c93e8fbbb138292703ed3df2575d02d6b15227253715d5d68b6ee
 - file: scripts/cluster/images/visualization/point_0/point_solver.png
   producer: scripts/cluster/visualization.py
   domain: cluster
   source: point_0
-  bytes: 1612341
-  sha256: aee2ad2ec7852ed1a8830806dea79300488bfc16bacf1d3f2ba095a74f9b2c76
+  bytes: 1675101
+  sha256: a8f3dfc5d96b6d187854a612c44759fb42917bc20b1fcfc92367066343aa64e8
 - file: scripts/cluster/images/visualization/point_1/dataset.png
   producer: scripts/cluster/visualization.py
   domain: cluster
   source: point_1
-  bytes: 38471
-  sha256: bec83f0aa4312eb0404f92873aa8aaced4bf011d207901b821e296d64b84d0f7
+  bytes: 34687
+  sha256: 9b32f374ccec809763526e5998bf32d1c4153c804dd618b1e785c514d894e7b7
 - file: scripts/cluster/images/visualization/point_1/fit.png
   producer: scripts/cluster/visualization.py
   domain: cluster
   source: point_1
-  bytes: 69261
-  sha256: 2bc4b5d6e683d5c4410ab319b8f71e199533d300a6c95ac8010f682b139c31a9
+  bytes: 65872
+  sha256: be8958670374c561aeb93fe03efc6c3d99582b6f3bfb725cbf8f939650d7eb56
 - file: scripts/cluster/images/visualization/point_1/fit_image_with_points.png
   producer: scripts/cluster/visualization.py
   domain: cluster
   source: point_1
-  bytes: 1594036
-  sha256: 2205d4d6b1c0f13d1ab8801dfbc917badd673d508e1968ddf37398230299b04a
+  bytes: 1613392
+  sha256: 3f3c219eb75e57dd403fb8fc87ad27b3988847a07d08d7b70a2ab2daf40430dc
 - file: scripts/cluster/images/visualization/point_1/fit_per_image.png
   producer: scripts/cluster/visualization.py
   domain: cluster
   source: point_1
-  bytes: 157772
-  sha256: fd1f9bedc956b26a6021797b9064f7c08da8cdd76143ce73c687aa3de1486de7
+  bytes: 162992
+  sha256: 89dd5af2f49d299ed8dfbb77ed80ee80caf8bea27cc386d34fb827620dd8d4ed
 - file: scripts/cluster/images/visualization/point_1/image_with_points.png
   producer: scripts/cluster/visualization.py
   domain: cluster
   source: point_1
-  bytes: 1594402
-  sha256: 53bf0a3e7a8ae764bde2db7feda75875a6be43f0ca20465ec9d1bf34a98611c2
+  bytes: 1612661
+  sha256: 9d8a6b1ab9ef7dc0359dc81f9a4f48a16b5960b9969dc1c100a8d69a962ed50c
 - file: scripts/cluster/images/visualization/point_1/point_solver.png
   producer: scripts/cluster/visualization.py
   domain: cluster
   source: point_1
-  bytes: 498835
-  sha256: cd6d587de9c7075e5ae3cab6d05a54dcc041b1be0b67ef1d5c321ce386cc98a9
+  bytes: 494006
+  sha256: 08abbef85127db46eea8c0b76a027d7f3386759431d7bc6d42bade46162fe48e
 - file: scripts/group/images/visualization/dataset.png
   producer: scripts/group/visualization.py
   domain: group
   source: ''
-  bytes: 573760
-  sha256: f0a8ec58ad7635dcf144f5d5f6f84538801d0374fa67cdb19af7a658d868ef1e
+  bytes: 583034
+  sha256: ee408e60ba874894e75bfc0adb25a29ea05b79b2270e1cef061a48033910cb50
 - file: scripts/group/images/visualization/fit.png
   producer: scripts/group/visualization.py
   domain: group
   source: ''
-  bytes: 961781
-  sha256: dadf482c93b92a561e2c8ca558aadb560dbf537b37b9926a506c329912d98841
+  bytes: 1066877
+  sha256: bb1dfa92eab4c6f01538e188164163915ba54f0fd8e0f7d0db327a6c570c1be8
 - file: scripts/imaging/images/visualization/adapt_images.png
   producer: scripts/imaging/visualization.py
   domain: imaging
   source: ''
-  bytes: 176121
-  sha256: a94be2528ef0ed122d62da9f660a49983a6d318d3abe286987499a444a24fed6
+  bytes: 201089
+  sha256: 3a34db230265244ec14da353a4a075a9f5271412ba597695b0ec2049adc56ce8
 - file: scripts/imaging/images/visualization/dataset.png
   producer: scripts/imaging/visualization.py
   domain: imaging
   source: ''
-  bytes: 567479
-  sha256: 09baa3cc5cf96f425793fc4c36de3b7f9c9e0e8e6aa9d0af084118b69ebbc2db
+  bytes: 579176
+  sha256: 6f4432c7a0156ee19a3b69cb03de5cf070d02f99d316b4b3d746877129b7ef6f
 - file: scripts/imaging/images/visualization/delaunay/fit.png
   producer: scripts/imaging/visualization.py
   domain: imaging
   source: delaunay
-  bytes: 861118
-  sha256: 9088e82a89b1509c67e06365a4a508a53aae19d11faaab24b7410a427a07c9ce
+  bytes: 982085
+  sha256: fe8a964d231eabfd1d9959cd5427b8ab0119b323d2356d03c485943bd13322c2
 - file: scripts/imaging/images/visualization/delaunay/fit_log10.png
   producer: scripts/imaging/visualization.py
   domain: imaging
   source: delaunay
-  bytes: 4137339
-  sha256: 5e7ff7532beb5b02431603587732eb42299b47f68c7173fbfba9caa2f45d8abf
+  bytes: 4252481
+  sha256: f61fd15ceb2e30a37b4aa592a9446c86da7ecc2afe7c0695866ec1b2926a47fb
 - file: scripts/imaging/images/visualization/delaunay/fit_of_plane_0.png
   producer: scripts/imaging/visualization.py
   domain: imaging
   source: delaunay
-  bytes: 155009
-  sha256: b5374ecbfe136000129f0b0f7fe798550ee3dcfa3ccd2530e10e51111ecdb2a5
+  bytes: 185778
+  sha256: cbd0a54454bd108dfc36d0ef6fcf9b9c9d16a888539c662a0dc8f280ed6f0d2f
 - file: scripts/imaging/images/visualization/delaunay/fit_of_plane_1.png
   producer: scripts/imaging/visualization.py
   domain: imaging
   source: delaunay
-  bytes: 245237
-  sha256: 25d6a7928df2268fc82f1d4a1bbb2fe8c72682c18b2991dce0251901610de946
+  bytes: 270603
+  sha256: 9110c9460f5b65bc06adafb35c95637c950f07131af8d37cbf932bf6ccc4376d
 - file: scripts/imaging/images/visualization/delaunay/galaxies.png
   producer: scripts/imaging/visualization.py
   domain: imaging
   source: delaunay
-  bytes: 785614
-  sha256: 238e7f9821f6c7d09dd204f6127c1509396003c70d3fa14869b90029ee6ced55
+  bytes: 767292
+  sha256: 0c1905e05ad165a823ebc0c60526c70f8518b0e5d3fd4ed38b0c9321ca19c9d2
 - file: scripts/imaging/images/visualization/delaunay/galaxies_images.png
   producer: scripts/imaging/visualization.py
   domain: imaging
   source: delaunay
-  bytes: 64377
-  sha256: 6939950aad2908ce900579c26a71c10256b563ee49bfc8d99bcfa2ed2eec6e7e
+  bytes: 87385
+  sha256: 3100430813df14189b633b8cf1d387339123a8bea9969e20485e4f79017fe2dd
 - file: scripts/imaging/images/visualization/delaunay/galaxy_images.png
   producer: scripts/imaging/visualization.py
   domain: imaging
   source: delaunay
-  bytes: 177796
-  sha256: 6c7c50ce34354fc9d1c428d5901867abc026583a02422dc5eb62a193fe13fa76
+  bytes: 199890
+  sha256: 119bbc728bf9e4e5f8b826e98bbd159c4639ab3fffee565602ceefe4354f0e82
 - file: scripts/imaging/images/visualization/delaunay/inversion_0_0.png
   producer: scripts/imaging/visualization.py
   domain: imaging
   source: delaunay
-  bytes: 596440
-  sha256: 1944025a1e13f9eb8461eade00f28dcc9d52e5d2f940398819f204802fe21ee5
+  bytes: 678863
+  sha256: af26323608d8cec0d666cb74fee9fd99443cc164f85a371dbb75913dc4fc1e2d
 - file: scripts/imaging/images/visualization/delaunay/mappings_1.png
   producer: scripts/imaging/visualization.py
   domain: imaging
   source: delaunay
-  bytes: 296270
-  sha256: c2e1cfddd2ea5b15c6dc64914b1a08ffc29d662a85ca819fcc9ee0219b7d699a
+  bytes: 317393
+  sha256: cbe9876cba2e4a3d8061451b26cf09d3e3621690e8da29b929f84e74eb71d6f6
 - file: scripts/imaging/images/visualization/delaunay/tracer.png
   producer: scripts/imaging/visualization.py
   domain: imaging
   source: delaunay
-  bytes: 651517
-  sha256: b6d211861760154a1e2f3a92b9b6612810541c8d4066456abbf81b92a111eff4
+  bytes: 679258
+  sha256: 513d3cbbace8badc9ef9680d3701426cb44d1eec3c27cfbd8cf500afe5f0e294
 - file: scripts/imaging/images/visualization/image_with_positions.png
   producer: scripts/imaging/visualization.py
   domain: imaging
   source: ''
-  bytes: 58701
-  sha256: e2a01084242a7a7510ff8b42414fe6c1edebb94c2402e6f5589517f053b374d2
+  bytes: 56471
+  sha256: 9ff94e4e0e9402e6fad7aaf14b223e70114c89330e131bd0a63e69144ae6fd54
 - file: scripts/imaging/images/visualization/parametric/fit.png
   producer: scripts/imaging/visualization.py
   domain: imaging
   source: parametric
-  bytes: 825761
-  sha256: dc55fb8bd27561031a9a9813ed30454cd2e111bb291fe5020505838de4f72980
+  bytes: 943763
+  sha256: f68d2eb823fb4621d46fbc04cb5ae563b2112c0fcf014adfb241a62ad24a31ba
 - file: scripts/imaging/images/visualization/parametric/fit_log10.png
   producer: scripts/imaging/visualization.py
   domain: imaging
   source: parametric
-  bytes: 4206796
-  sha256: cf5092b07fbad794ebb69a942b28b17f74477afdc8898acab0ea2511345dbd83
+  bytes: 4322734
+  sha256: 436d0abf6d140b579a0b2defbc879f3dff7edc55c87d95b4d7dd396dc9393769
 - file: scripts/imaging/images/visualization/parametric/fit_of_plane_0.png
   producer: scripts/imaging/visualization.py
   domain: imaging
   source: parametric
-  bytes: 148170
-  sha256: ce2ff71875a4b5accf08c7f17ac7a1376215c2970a2e9d9c4bfbf24e9af0e862
+  bytes: 178733
+  sha256: 374b11918489d939f7d16de61e1949c71e64e7a6886f571080efccd1396e57b9
 - file: scripts/imaging/images/visualization/parametric/fit_of_plane_1.png
   producer: scripts/imaging/visualization.py
   domain: imaging
   source: parametric
-  bytes: 219993
-  sha256: fd692224dc5e4a29693020da48aa6d8e8713611e86e627e07223eaeec49b3b3d
+  bytes: 247144
+  sha256: 8f8459caefc41a089be61be095d02cd33e5b4a033cc3eef75e4b6a491bd04560
 - file: scripts/imaging/images/visualization/parametric/galaxies.png
   producer: scripts/imaging/visualization.py
   domain: imaging
   source: parametric
-  bytes: 788015
-  sha256: cf8dbf0ffef31f50139f7226c60ae4397af7b9e90e1c860e325615473a122970
+  bytes: 770638
+  sha256: cce170b82d15645c03ab1c19afe031ea981850b1170ae8e10f5b10e129bc5164
 - file: scripts/imaging/images/visualization/parametric/galaxies_images.png
   producer: scripts/imaging/visualization.py
   domain: imaging
   source: parametric
-  bytes: 83604
-  sha256: 21133f5d07d5145140fa5a35b3734bb64bea00a156e9d1d6fea3e88ef8cf7b0d
+  bytes: 96567
+  sha256: b04313705507e3943f51b3debee3c3a9c86fa2b47d5bb8eaf9afc7c3091c2d8d
 - file: scripts/imaging/images/visualization/parametric/galaxy_images.png
   producer: scripts/imaging/visualization.py
   domain: imaging
   source: parametric
-  bytes: 164135
-  sha256: 8a553d1cd07cae9d3084df0b7067a74010e2cfe7a72f7a4e432722563799f946
+  bytes: 191549
+  sha256: 262cb24cf17ad6fa4f055515d695c57d2c0c8e126b313f2906889fa5a8ac6324
 - file: scripts/imaging/images/visualization/parametric/mappings_1.png
   producer: scripts/imaging/visualization.py
   domain: imaging
   source: parametric
-  bytes: 282525
-  sha256: 2bcd5ad2b5c1937d3d2fef57ea1384d08c6302e78b8fb578e35224075fc10fc7
+  bytes: 306076
+  sha256: 21341688651869c7860bc708ee636b75c5aafe0558342a945a0506050440e45b
 - file: scripts/imaging/images/visualization/parametric/tracer.png
   producer: scripts/imaging/visualization.py
   domain: imaging
   source: parametric
-  bytes: 632574
-  sha256: 24c3abd036fa99cec2345e451f945c1e44dc8df12430f7815ef58073edd5e2c2
+  bytes: 670189
+  sha256: 47c606a69029787e6cecbbba6e59deccc02482dab1b81bc601288f13e6cf945b
 - file: scripts/interferometer/images/visualization/adapt_images.png
   producer: scripts/interferometer/visualization.py
   domain: interferometer
   source: ''
-  bytes: 97002
-  sha256: f16c7e3af7fb3925d73e196db30f7e084cf5ebc6eb344bbdf1b3f44ce03740b6
+  bytes: 90107
+  sha256: bff7ba7a552d3cecf4adb54df05a884a497d98c9ec16475db56f4692cbbac0e1
 - file: scripts/interferometer/images/visualization/dataset.png
   producer: scripts/interferometer/visualization.py
   domain: interferometer
   source: ''
-  bytes: 182758
-  sha256: 795eb12a472ed7dda3677cef21cf86cd9a8f8dd87cdad232972974738c1af04d
+  bytes: 195578
+  sha256: 5888d18a0dcb72f08ad442d88b6fbce20ca50c2804356013684862c2a240dd5c
 - file: scripts/interferometer/images/visualization/delaunay/fit.png
   producer: scripts/interferometer/visualization.py
   domain: interferometer
   source: delaunay
-  bytes: 636825
-  sha256: d856e15c2f7ecea1d61890011bba94e21f88b8f3175f002d37eb8386a3334622
+  bytes: 713180
+  sha256: 4f03147add9cbf65e47ea45190af132b4a79dff9e4fb80fa96d6e42efee7624b
 - file: scripts/interferometer/images/visualization/delaunay/fit_dirty_images.png
   producer: scripts/interferometer/visualization.py
   domain: interferometer
   source: delaunay
-  bytes: 345075
-  sha256: 53de720483f2009734282df50f02aa0bb3b4e3f1e1273ab198261d2e5be2e9b2
+  bytes: 364218
+  sha256: d6c06aa35730dff79f00d2cdeb633191776cc9ea7de44b430b2d57784ba1dcef
 - file: scripts/interferometer/images/visualization/delaunay/fit_real_space.png
   producer: scripts/interferometer/visualization.py
   domain: interferometer
   source: delaunay
-  bytes: 115742
-  sha256: f1f0f2ef72c6c82ab4712fa756d87ed8b850f97f22bba83b72b626fd8a5802b2
+  bytes: 116778
+  sha256: 69a571adef14f70a7b0bc44aa8dadfcaecb4a1a569c1c8ef03bfe017c9983ac6
 - file: scripts/interferometer/images/visualization/delaunay/galaxies.png
   producer: scripts/interferometer/visualization.py
   domain: interferometer
   source: delaunay
-  bytes: 572381
-  sha256: cfbf2750000f9c301666b6d7cf48ca076e2a509c31d059c98a3adb7cff42b9e8
+  bytes: 559679
+  sha256: 3fd4e68fb93ea3bc404fddbd98f20a5d8c17f0da97a64848a3d27a4fa21d6878
 - file: scripts/interferometer/images/visualization/delaunay/galaxies_images.png
   producer: scripts/interferometer/visualization.py
   domain: interferometer
   source: delaunay
-  bytes: 54794
-  sha256: dadccd0da84f5ffed74ea9e5470e50a402fdabdc9f6e08eb3082c185903a3da3
+  bytes: 63847
+  sha256: 9b668169c524fc4b090d8951a6b20bab50234b09647ea0181bdc62ce8c21eaee
 - file: scripts/interferometer/images/visualization/delaunay/galaxy_images.png
   producer: scripts/interferometer/visualization.py
   domain: interferometer
   source: delaunay
-  bytes: 111089
-  sha256: 7707693eb66fa1176247a7379611658a7c8038316e145c3ea519a6286d2dab3c
+  bytes: 138883
+  sha256: ecfd2962016e10d519afa5e4b0bf89a0ad90d78fad47fccc7c6176b56fc1dd4f
 - file: scripts/interferometer/images/visualization/delaunay/inversion_0_0.png
   producer: scripts/interferometer/visualization.py
   domain: interferometer
   source: delaunay
-  bytes: 513159
-  sha256: f29ee5e4fc6733a18262778f7ab8622087f53ed6b4776126d2c9f545166f674f
+  bytes: 586803
+  sha256: 14d1aea9e24895bc4bce7b20edbab314f426641e599d5d7f9202eb81a1af3358
 - file: scripts/interferometer/images/visualization/delaunay/tracer.png
   producer: scripts/interferometer/visualization.py
   domain: interferometer
   source: delaunay
-  bytes: 958630
-  sha256: fee0eea24e65683633bb1c7c989a637d46bd7c4a3cac66bc49ad04c3693a28ed
+  bytes: 1016186
+  sha256: 701aea92d76b58ecceca49a0af39023ce4e0090b3d5ce01af56df4a2197d46a1
 - file: scripts/interferometer/images/visualization/image_with_positions.png
   producer: scripts/interferometer/visualization.py
   domain: interferometer
   source: ''
-  bytes: 76434
-  sha256: a091c48969333486262b878637cc03d1ba8b3f626bb754be37ecce31bc76d5b1
+  bytes: 75001
+  sha256: b02d4cc52f62fcac01fd74453f9b2a78fe19a9eba5eca51edc6b50dc3c12c59f
 - file: scripts/interferometer/images/visualization/parametric/fit.png
   producer: scripts/interferometer/visualization.py
   domain: interferometer
   source: parametric
-  bytes: 700421
-  sha256: f47607918e7402754c04b18a9562bd467d2fb0a2d8c126b20e46bd567c680baf
+  bytes: 780764
+  sha256: 1dcf86258c42a4380f115c709a5b3b828952b8ffbe6c0257eb8a083eef1988f1
 - file: scripts/interferometer/images/visualization/parametric/fit_dirty_images.png
   producer: scripts/interferometer/visualization.py
   domain: interferometer
   source: parametric
-  bytes: 346784
-  sha256: 23cf083e6e0648c869fb2f6f9d1298d8f46debe8a0f511f983afc02adbcecbe6
+  bytes: 365968
+  sha256: 6a76a341ff0af4cebe8ec9a816fe3c60e388d09efa513d87d0fa30e1f39ed1df
 - file: scripts/interferometer/images/visualization/parametric/fit_real_space.png
   producer: scripts/interferometer/visualization.py
   domain: interferometer
   source: parametric
-  bytes: 170592
-  sha256: 37a60789992a488c709a24818619b4966f7742c534e77ac0af441280d8681237
+  bytes: 173301
+  sha256: 768603311b18bb9262379f3e8c03331432cc08dff918b6bebcae03e45c2289db
 - file: scripts/interferometer/images/visualization/parametric/galaxies.png
   producer: scripts/interferometer/visualization.py
   domain: interferometer
   source: parametric
-  bytes: 571302
-  sha256: b7dbd2e092a9d57a8391e2262c212ab7f719b5ceae043475229139f5dd12a686
+  bytes: 558483
+  sha256: 7b4a5fffafd8b4f7a6ff3744d3dbdd5f2fc8f4912f27e737f9bd83641e7331e0
 - file: scripts/interferometer/images/visualization/parametric/galaxies_images.png
   producer: scripts/interferometer/visualization.py
   domain: interferometer
   source: parametric
-  bytes: 80443
-  sha256: 776a5d382dbe4fda29021f60f40eca33e3062239cce7c0275c41673fe6302695
+  bytes: 107630
+  sha256: 4731bfaf2e48b7020c41d5abc26eec7753a9b12df4ebec68823a6a79f5bd5857
 - file: scripts/interferometer/images/visualization/parametric/galaxy_images.png
   producer: scripts/interferometer/visualization.py
   domain: interferometer
   source: parametric
-  bytes: 137207
-  sha256: f7b8e56f49a812420c1ca98e80d798e4fdbd18ca21f1264d822f5cc7d1d43a1d
+  bytes: 158439
+  sha256: 42e5fd04cdc805a2a044559aa21f5cbcaa73735edae6d5617c489675c3dbf3fe
 - file: scripts/interferometer/images/visualization/parametric/tracer.png
   producer: scripts/interferometer/visualization.py
   domain: interferometer
   source: parametric
-  bytes: 946629
-  sha256: f6d63eb11ef7bc570da0134fbae8bc510273ece20b1ec900ef56bb0f61f583f2
+  bytes: 1002413
+  sha256: 58f6e99efad7c05d962c59cd8b3a8d97147126db93d480b35b6325b4da31337e
 - file: scripts/interferometer_datacube/images/visualization/channel_0/dataset.png
   producer: scripts/interferometer_datacube/visualization.py
   domain: interferometer_datacube
   source: channel_0
-  bytes: 183854
-  sha256: a983b279f4e50f48cd1c2775bbc1723fc41887e993c33c908168f963438d2aeb
+  bytes: 198966
+  sha256: 4e7c03ea01c9a8f8ef48ec9bfe47d9b662c37484e7f6d4aa7afd47c7f7724848
 - file: scripts/interferometer_datacube/images/visualization/channel_0/fit.png
   producer: scripts/interferometer_datacube/visualization.py
   domain: interferometer_datacube
   source: channel_0
-  bytes: 675382
-  sha256: 323c5ae0fc94bab7fc3e49eca6ffe8aa0f0af4aa8f08d2b00a8dd789eeacd3b3
+  bytes: 741674
+  sha256: 0ec0aa8eb7217aec0877bc60832f2de9f6ccceaddde1e60d196a55d8fd61d336
 - file: scripts/interferometer_datacube/images/visualization/channel_1/dataset.png
   producer: scripts/interferometer_datacube/visualization.py
   domain: interferometer_datacube
   source: channel_1
-  bytes: 186446
-  sha256: ca7d94405ccf5acd948481c2de383460e35ea2db295c050a3d8d41a480851b70
+  bytes: 202935
+  sha256: 4b7a238966cd09a3760d49110542ccbfadc78abcba6f40f7f6fbff87aa86ecb8
 - file: scripts/interferometer_datacube/images/visualization/channel_1/fit.png
   producer: scripts/interferometer_datacube/visualization.py
   domain: interferometer_datacube
   source: channel_1
-  bytes: 665394
-  sha256: ee1cbfef3c101df4e45a23a9ac2f04880f28bc812b1152746cd8ffbe9e8204e3
+  bytes: 735989
+  sha256: 07640a6fd625de9d7911e11aa30cc2fd0d5bb7e45401eeaadd7e39c527a67f0e
 - file: scripts/interferometer_datacube/images/visualization/channel_2/dataset.png
   producer: scripts/interferometer_datacube/visualization.py
   domain: interferometer_datacube
   source: channel_2
-  bytes: 183675
-  sha256: 52c3f579c4cf580ee3bfb0b59de1507d44edcef9d961535408caa980c230c33c
+  bytes: 197310
+  sha256: 26359d7ff3335236bb8cbb9a23f42801013283d12bd0d37f380b441b5fa7d6f8
 - file: scripts/interferometer_datacube/images/visualization/channel_2/fit.png
   producer: scripts/interferometer_datacube/visualization.py
   domain: interferometer_datacube
   source: channel_2
-  bytes: 670695
-  sha256: c5907fe660ad4c594d57e3a8e3668ee277eb1aef2dd516578aacd1a0c9f39710
+  bytes: 736394
+  sha256: 76003afa0c08667dc98a683d25ec4675b229bcba95bfedbee8365103940d811c
 - file: scripts/multi_dataset/images/visualization/g/dataset.png
   producer: scripts/multi_dataset/visualization.py
   domain: multi_dataset
   source: g
-  bytes: 668527
-  sha256: 4075b820a1165c9db35be05ea4bbd66725935c7aa00b3ce4ac9f0d29e80892a0
+  bytes: 675745
+  sha256: 509426d5d192492c15902c7b968b2faaf6011ecfb51a4e60694eab8575109adb
 - file: scripts/multi_dataset/images/visualization/g/fit.png
   producer: scripts/multi_dataset/visualization.py
   domain: multi_dataset
   source: g
-  bytes: 631632
-  sha256: 6e3292a3eec4544a89a3f003de37d88344949e888858eb893bd0363ab1947deb
+  bytes: 749711
+  sha256: 47ddef738b6ef9e03a137ade49718440e93e8d444fda2275700ce9c0ba2e10d8
 - file: scripts/multi_dataset/images/visualization/r/dataset.png
   producer: scripts/multi_dataset/visualization.py
   domain: multi_dataset
   source: r
-  bytes: 395135
-  sha256: c63d64d852b6333c432f644434bf9f1f14ee0287c1c23aafd243ad6c81e55557
+  bytes: 406363
+  sha256: b397c147624c57f1a23e47c7a14ba19167d76994e97601905b45079237ea1d57
 - file: scripts/multi_dataset/images/visualization/r/fit.png
   producer: scripts/multi_dataset/visualization.py
   domain: multi_dataset
   source: r
-  bytes: 523377
-  sha256: f7f1b46225dff8da6ed524b66b8e6f2d1c78ede0d6f61307b3633879ce4898ef
+  bytes: 635620
+  sha256: 8ecc7e7306080700631e5251dfc6a98a773e88dceb870cfbd898d245ad314ed2
 - file: scripts/multi_galaxy/images/visualization/dataset.png
   producer: scripts/multi_galaxy/visualization.py
   domain: multi_galaxy
   source: ''
-  bytes: 509777
-  sha256: 86adb3c0fda699c17ea74c29fbd4d6f14c9a881ebf0fdefdf37d027c6ce16fbb
+  bytes: 521835
+  sha256: c7d64c39240e9e8ed329d31845dbd65984075531d3f971bdc77e9dfdad53bff6
 - file: scripts/multi_galaxy/images/visualization/fit.png
   producer: scripts/multi_galaxy/visualization.py
   domain: multi_galaxy
   source: ''
-  bytes: 846698
-  sha256: fcc6e9a2c73e438b396b55a49c9bebe8dc5a08323c3c44ee107665d47ccb7723
+  bytes: 961010
+  sha256: 9ab8338574306e952b61c10e7adf65f45bf66a1e59e867b291b57e361554b8f0
 - file: scripts/point_source_image_chi_squared/images/visualization/dataset.png
   producer: scripts/point_source_image_chi_squared/visualization.py
   domain: point_source_image_chi_squared
   source: ''
-  bytes: 41467
-  sha256: 1b2cd9eaf2993c88d0d00e0ab5c4c8ee0341eae8f13a090e963a5fe87cb8f56f
+  bytes: 37123
+  sha256: 33d3328e6a4fef7d4eeb1c5a478a7a0a2a2b827a53afa36221df544c54d07f9c
 - file: scripts/point_source_image_chi_squared/images/visualization/fit.png
   producer: scripts/point_source_image_chi_squared/visualization.py
   domain: point_source_image_chi_squared
   source: ''
-  bytes: 69132
-  sha256: ded481e0b14a8177b371678ce5de58c98be2a6262c60e57630f9d554ace80091
+  bytes: 66334
+  sha256: 3cc1896545dfee8118faa6238ee2711ad1db899d21e6a30dfecaa73695e9a888
 - file: scripts/point_source_image_chi_squared/images/visualization/fit_image_with_points.png
   producer: scripts/point_source_image_chi_squared/visualization.py
   domain: point_source_image_chi_squared
   source: ''
-  bytes: 97161
-  sha256: eb2533b6c01023877e5dbdd9485dcbc7e4444bd127c25dfe5bbfe4ccea4a3d10
+  bytes: 96415
+  sha256: b7a87cb9d64442381d50368a5d1c72ebf1537deef71faebd6a667af69a7a7d7d
 - file: scripts/point_source_image_chi_squared/images/visualization/fit_per_image.png
   producer: scripts/point_source_image_chi_squared/visualization.py
   domain: point_source_image_chi_squared
   source: ''
-  bytes: 162798
-  sha256: 38cd9c0ecc77ba0d8ece792aacd938cec84a61ed65a6ea0089d6511b43cd6156
+  bytes: 170838
+  sha256: 0ddf01eeb0b870364ded2a04b7067f39c380805ca83abf1a8a8d438f01783624
 - file: scripts/point_source_image_chi_squared/images/visualization/image_with_points.png
   producer: scripts/point_source_image_chi_squared/visualization.py
   domain: point_source_image_chi_squared
   source: ''
-  bytes: 64461
-  sha256: 34ba107cfea58ce794e77ce633b4b10720fa90c125c696b9e4f6ff10aee380f8
+  bytes: 63371
+  sha256: 5383e6a39be270c889ac6d43f6702a29f95e3ba34a4174833274e202a7db1739
 - file: scripts/point_source_image_chi_squared/images/visualization/point_solver.png
   producer: scripts/point_source_image_chi_squared/visualization.py
   domain: point_source_image_chi_squared
   source: ''
-  bytes: 1119668
-  sha256: c9d107b92a4813f65c96c421801106117153ffa3abe70a927c448e2e7f581930
+  bytes: 806592
+  sha256: 9c54f259e73665b15e382f544c812d09446478e86bfd6a4566ec83dbc9b7b16b
 - file: scripts/point_source_image_chi_squared/images/visualization/teaching/point_solver.png
   producer: scripts/point_source_image_chi_squared/visualization.py
   domain: point_source_image_chi_squared
   source: teaching
-  bytes: 439486
-  sha256: fdeffd50c2645c42cd657736cedfaa7156f630e53f73db5fd545370f124d8e1a
+  bytes: 475620
+  sha256: 758a10c444a779c3e2452e964b4468467c718e58c28dea9f7ac39b493004feb9
 - file: scripts/point_source_source_chi_squared/images/visualization/dataset.png
   producer: scripts/point_source_source_chi_squared/visualization.py
   domain: point_source_source_chi_squared
   source: ''
-  bytes: 41467
-  sha256: 1b2cd9eaf2993c88d0d00e0ab5c4c8ee0341eae8f13a090e963a5fe87cb8f56f
+  bytes: 37123
+  sha256: 33d3328e6a4fef7d4eeb1c5a478a7a0a2a2b827a53afa36221df544c54d07f9c
 - file: scripts/point_source_source_chi_squared/images/visualization/fit.png
   producer: scripts/point_source_source_chi_squared/visualization.py
   domain: point_source_source_chi_squared
   source: ''
-  bytes: 65064
-  sha256: 11544045f42623fe7a87084c7a3fa886649388705226fec73931dab820550f11
+  bytes: 61771
+  sha256: 92d1544c12a0cf467126d1d9efdcb971bb9efc4dbf0844273ae872d8165ffc1a
 - file: scripts/point_source_source_chi_squared/images/visualization/fit_image_with_points.png
   producer: scripts/point_source_source_chi_squared/visualization.py
   domain: point_source_source_chi_squared
   source: ''
-  bytes: 97106
-  sha256: f9f5fdebf0f3620dc4b8cec098953fc59ecb98a9fa9437694666b0658134d9a3
+  bytes: 96169
+  sha256: 3845d4ca54baa012289562476cfe81cb69aae41767fef67ba10e0a51286996c8
 - file: scripts/point_source_source_chi_squared/images/visualization/fit_per_image.png
   producer: scripts/point_source_source_chi_squared/visualization.py
   domain: point_source_source_chi_squared
   source: ''
-  bytes: 201841
-  sha256: f6c1bbb08bbdf91707e30701be4908b6b7b19497518598f02393c465f2c0d4b2
+  bytes: 208352
+  sha256: 501333396beb9fa2ae7cf828655d2d1482e3227118c231d2ea9eb579adf74f39
 - file: scripts/point_source_source_chi_squared/images/visualization/image_with_points.png
   producer: scripts/point_source_source_chi_squared/visualization.py
   domain: point_source_source_chi_squared
   source: ''
-  bytes: 64461
-  sha256: 34ba107cfea58ce794e77ce633b4b10720fa90c125c696b9e4f6ff10aee380f8
+  bytes: 63371
+  sha256: 5383e6a39be270c889ac6d43f6702a29f95e3ba34a4174833274e202a7db1739
 - file: scripts/weak/images/visualization/dataset.png
   producer: scripts/weak/visualization.py
   domain: weak
   source: ''
-  bytes: 760042
-  sha256: 909c19c8aec6e2b77cb10e112594654e13fb889df477e98d60fb16b6fa91e3f6
+  bytes: 768412
+  sha256: 3893487fbc87d36bab28290e164aca8dddeb77abc9400954ae12d0ceceb6d3c8
 - file: scripts/weak/images/visualization/fit.png
   producer: scripts/weak/visualization.py
   domain: weak
   source: ''
-  bytes: 955636
-  sha256: f1f889b138a5243d22df3253aa6e90981fa19ee2ec13c162a0912834512ee088
+  bytes: 970922
+  sha256: 3a45837edf57dc44b87208ff7e19fbef11f7ab8488a9ba0d26df5f6021423227

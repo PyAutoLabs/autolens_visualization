@@ -16,24 +16,27 @@ Output tree (wiped at the start of every run)::
         image_with_points.png      <- every source's positions over the cluster image
         fit.png                    <- VisualizerPoint.visualize_combined: "Fit Positions" of
                                       every source, each source's critical curves at its own z
-        fit_per_image.png          <- one row per source: residual ranking (range shared by
-                                      both sources) / image-plane zoom / source plane
         fit_image_with_points.png  <- every source's positions and curves over the image
         point_0/ point_1/          <- each dataset's own figures (visualize_before_fit +
-                                      visualize): dataset.png, image_with_points.png, fit.png,
+                                      visualize): dataset.png, image_with_points.png,
                                       fit_per_image.png, fit_image_with_points.png and
                                       point_solver.png (the model's real multi-plane PointSolver
                                       refining onto this source's images)
+            fit.png                <- source-plane family fit from visualize_combined
+            fit_image_plane.png    <- image-plane family fit from visualize_combined
 
 The per-dataset ``visualize`` also writes the tracer and galaxy figures, which this repo does
 not track: they (and every other untracked file) are deleted, and ``dataset_point.png`` is
-renamed ``dataset.png``.
+renamed ``dataset.png``. The family index keeps each source's marker and colour consistent
+with the combined cluster overview.
 
 Dataset: ``dataset/cluster/simple`` (``point_0``: 5 images, ``point_1``: 2 images, 5 mas noise,
 and ``data.fits``: the cluster image, visualization only), from
-``scripts/misc/simulators/cluster.py``. The model is that simulator's TRUE model
-(``true_models/cluster.py``), fitted with the source-plane chi-squared
-(``FitPositionsSource``) the workspace cluster example uses, with free-centre point sources.
+``scripts/misc/simulators/cluster.py``. The model uses the simulator's lens and source galaxies
+(``true_models/cluster.py``) with the point_0 source y coordinate offset by 0.003 arcsec to show
+how the family figure diagnoses a small model error. The source-plane chi-squared
+(``FitPositionsSource``) matches the workspace cluster example. The image-plane family figures
+use ``FitPositionsImagePairRepeat``.
 
 Run from the repo root::
 
@@ -77,15 +80,16 @@ STEM = Path(__file__).stem
 dataset_path = ensure_dataset("cluster", workspace_root=REPO_ROOT)
 
 """
-__True Model__
+__Model__
 
-The simulator's galaxies, every parameter fixed: the prior-median instance IS the true model.
-Lens galaxies, scaling members and halo go in ``galaxies`` alongside the two sources.
+Lens galaxies, scaling members and halo go in ``galaxies`` alongside the two sources. Offset the
+first point source to demonstrate how a small model error can affect its images differently.
 """
+sources = tm.sources()
+y, x = sources[0].point_0.centre
+sources[0].point_0.centre = (y + 0.003, x)
 model = af.Collection(
-    galaxies=af.Collection(
-        *tm.main_lenses(), *tm.scaling_galaxies(), tm.host_halo(), *tm.sources()
-    ),
+    galaxies=af.Collection(*tm.main_lenses(), *tm.scaling_galaxies(), tm.host_halo(), *sources),
 )
 instance = model.instance_from_prior_medians()
 
@@ -138,13 +142,16 @@ for i in range(len(tm.SOURCE_REDSHIFTS)):
     paths = SimpleNamespace(image_path=point_path, output_path=scratch)
 
     t0 = time.perf_counter()
-    VisualizerPoint.visualize_before_fit(analysis=analysis, paths=paths, model=model)
+    VisualizerPoint.visualize_before_fit(
+        analysis=analysis, paths=paths, model=model, family_index=i
+    )
     VisualizerPoint.visualize(
         analysis=analysis,
         paths=paths,
         instance=instance,
         during_analysis=False,
         quick_update=False,
+        family_index=i,
     )
     keep_dataset_and_fit(
         point_path,
@@ -177,10 +184,41 @@ VisualizerPoint.visualize_combined(
 keep_dataset_and_fit(
     image_path,
     dataset_png="dataset_point.png",
-    extra_pngs=("fit_per_image.png", "image_with_points.png", "fit_image_with_points.png"),
+    extra_pngs=("image_with_points.png", "fit_image_with_points.png"),
     keep_dirs=tuple(analysis.dataset.name for analysis in analyses),
 )
-print(f"visualize [all sources]: {time.perf_counter() - t0:.1f}s")
+print(f"visualize [all sources, source plane]: {time.perf_counter() - t0:.1f}s")
+
+"""
+__Image-Plane Family Fits__
+
+Run the same full combined visualizer with the image-plane likelihood. Keep its family figures
+alongside the source-plane ones and leave the rest of the second run under the scratch output.
+"""
+t0 = time.perf_counter()
+image_plane_analyses = [
+    al.AnalysisPoint(
+        dataset=analysis.dataset,
+        solver=solver,
+        image=image,
+        fit_positions_cls=al.FitPositionsImagePairRepeat,
+        use_jax=False,
+    )
+    for analysis in analyses
+]
+image_plane_path = scratch_root / "image_plane"
+image_plane_path.mkdir()
+VisualizerPoint.visualize_combined(
+    analyses=image_plane_analyses,
+    paths=SimpleNamespace(image_path=image_plane_path, output_path=image_plane_path),
+    instance=[instance] * len(image_plane_analyses),
+    during_analysis=False,
+    quick_update=False,
+)
+for analysis in image_plane_analyses:
+    name = analysis.dataset.name
+    (image_plane_path / name / "fit.png").replace(image_path / name / "fit_image_plane.png")
+print(f"visualize [all sources, image plane]: {time.perf_counter() - t0:.1f}s")
 
 n_png = len(list(image_path.rglob("*.png")))
 print(f"Wrote {n_png} PNGs under {image_path.relative_to(REPO_ROOT)}")

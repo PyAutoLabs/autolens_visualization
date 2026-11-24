@@ -34,16 +34,18 @@ mirroring `autolens_workspace` (a variant gets its own folder):
 | `point_source_source_chi_squared` | `visualization.py` | `dataset.png` + `fit.png` |
 | `multi_galaxy` | `visualization.py` | `dataset.png` + `fit.png` |
 | `group` | `visualization.py` | `dataset.png` + `fit.png` |
-| `cluster` | `visualization.py` | `dataset.png` + `fit.png` + `point_solver.png` per point-source plane |
+| `cluster` | `visualization.py` | Combined cluster figures and per-source figures, including `fit.png` (source-plane family fit), `fit_image_plane.png` and `point_solver.png` |
 | `multi_dataset` | `visualization.py` | `dataset.png` + `fit.png` per band |
 | `weak` | `visualization.py` | `dataset.png` + `fit.png` |
 
 Each figure is exactly what the visualizers (`VisualizerImaging`, `VisualizerInterferometer`,
-`VisualizerPoint`, `VisualizerWeak`) write to a fit's `image/` folder, rendered with the
-simulator's true model, with every toggle in
-[`config/visualize/plots.yaml`](config/visualize/plots.yaml) switched on. Imaging and
-interferometer render every figure; the other types track just the dataset and fit figures for
-now (several reuse galaxy-scale plots — bespoke point, cluster and weak figures come next).
+`VisualizerPoint`, `VisualizerWeak`) write to a fit's `image/` folder. The producers use the
+simulation models and enable the figure settings in
+[`config/visualize/plots.yaml`](config/visualize/plots.yaml). Imaging and
+interferometer render every figure. Other types track a subset, as shown above. The Simple
+cluster model offsets the `point_0` source y coordinate by 0.003 arcsec to demonstrate how a
+small model error affects the individual images. Both family figures use this same model and
+the tracked simulated positions.
 
 ## Render locally
 

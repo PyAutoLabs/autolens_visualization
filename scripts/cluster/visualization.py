@@ -27,7 +27,8 @@ Output tree (wiped at the start of every run)::
 
 The per-dataset ``visualize`` also writes the tracer and galaxy figures, which this repo does
 not track: they (and every other untracked file) are deleted, and ``dataset_point.png`` is
-renamed ``dataset.png``.
+renamed ``dataset.png``. The family index keeps each source's marker and colour consistent
+with the combined cluster overview.
 
 Dataset: ``dataset/cluster/simple`` (``point_0``: 5 images, ``point_1``: 2 images, 5 mas noise,
 and ``data.fits``: the cluster image, visualization only), from
@@ -141,13 +142,16 @@ for i in range(len(tm.SOURCE_REDSHIFTS)):
     paths = SimpleNamespace(image_path=point_path, output_path=scratch)
 
     t0 = time.perf_counter()
-    VisualizerPoint.visualize_before_fit(analysis=analysis, paths=paths, model=model)
+    VisualizerPoint.visualize_before_fit(
+        analysis=analysis, paths=paths, model=model, family_index=i
+    )
     VisualizerPoint.visualize(
         analysis=analysis,
         paths=paths,
         instance=instance,
         during_analysis=False,
         quick_update=False,
+        family_index=i,
     )
     keep_dataset_and_fit(
         point_path,

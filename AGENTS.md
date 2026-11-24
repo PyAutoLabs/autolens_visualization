@@ -40,7 +40,8 @@ scripts/
   point_source_source_chi_squared/visualization.py  VisualizerPoint, FitPositionsSource
   multi_galaxy/visualization.py         VisualizerImaging, two lenses + extra galaxy
   group/visualization.py                VisualizerImaging, main lens + two extra galaxies
-  cluster/visualization.py              PlotterPoint, multi-plane: point_<i>/{dataset,fit}.png
+  cluster/visualization.py              VisualizerPoint, multi-plane: cluster overviews,
+                                        point_<i>/{dataset,fit,fit_image_plane}.png and extras
   multi_dataset/visualization.py        VisualizerImaging per band: <band>/{dataset,fit}.png
   weak/visualization.py                 VisualizerWeak
   misc/simulators/                      one simulator per dataset (regenerate datasets)
@@ -66,17 +67,14 @@ the full figure set. Every other producer tracks only `dataset.png` and `fit.png
 `visualize_before_fit`, then `visualize(..., quick_update=True)` with the true model, then
 `_viz_cli.keep_dataset_and_fit` renames the plotter's files where they differ (point:
 `dataset_point.png`; weak: `subplot_weak_dataset.png` / `subplot_fit_weak.png`) and deletes
-everything else. Producers with several sub-datasets write one pair per sub-folder
-(`multi_dataset` per band, the datacube per channel, `cluster` per point-source plane). Many
-of these figures are the galaxy-scale plots and look poor on point / cluster / weak data —
-bespoke figures are a follow-up through the Eyes dashboard. `cluster` calls the
-`PlotterPoint` methods directly instead of `VisualizerPoint`, skipping the untracked tracer and
-galaxy figures; the "Fit Positions" and point-solver panels still draw the critical curves, which
-cost ~2 min per dataset on the 15-galaxy multi-plane lens (the PNGs match the visualizer's).
-Every point-source `fit.png` (both chi-squared domains and `cluster`) also has a "Fit Source
-Plane" panel — the observed positions traced to the point's own plane — whose presentation
-follows the fit class: context only for an image-plane chi-squared, the chi-squared's own noise
-footprint and value for a source-plane chi-squared (PyAutoLens#789).
+everything else. Producers with several sub-datasets use sub-folders (`multi_dataset` per band,
+the datacube per channel, `cluster` per point-source family). The cluster producer keeps the
+combined figures and selected per-dataset figures from `VisualizerPoint`. Its full combined
+update writes `point_<i>/fit.png` for the source-plane likelihood. A second full update with
+the image-plane likelihood supplies `point_<i>/fit_image_plane.png`. Both use the simulator's
+model with a 0.003 arcsec y offset to the first point source. The family fit shows the observed
+positions traced to the point's own plane, along with per-image contributions from the
+likelihood used.
 
 **Point solver.** `point_source_image_chi_squared` (via `visualize(quick_update=False)`) and
 `cluster` (per plane) also keep `point_solver.png`: the model's real `PointSolver` refining onto
@@ -127,8 +125,8 @@ are no mtimes: it is reproducible from a checkout. `--check` ignores only `gener
 `rendered_with:`; any added, removed or byte-changed PNG fails it. It is the read contract of the
 PyAutoEyes dashboard — change its shape only together with the organ.
 
-Each producer pushes `config/` via `conf.instance.push` (the all-true `plots.yaml`), loads its
-tracked dataset, builds the simulator's **true model** (every parameter fixed), and calls
+Each producer pushes `config/` via `conf.instance.push`, loads its tracked dataset, builds a
+fixed model from the simulator's model, and calls
 `Visualizer*.visualize_before_fit` once and `Visualizer*.visualize` once per source type (the
 imaging and interferometer `visualization.py` producers; the others are described above)
 (`parametric/` = SersicCore, `delaunay/` = Overlay image-mesh + `Delaunay` + `ConstantSplit`),
@@ -154,8 +152,8 @@ The newer datasets are simulated here from `scripts/misc/simulators/<name>.py`, 
 from the matching `autolens_workspace` simulator (`datacube.py` from
 `interferometer/features/datacube/simulator.py`) and cut down to stay small, with seeded noise.
 Their true models live in `true_models/<name>.py`, imported by both the simulator and the
-producer, so the fit is always of the model that made the data. Each is registered in
-`_viz_cli.DATASETS` (directory, simulator stem, sentinel file); producers call
+producer. The cluster producer applies its diagnostic offset only to the fit model. Each
+dataset is registered in `_viz_cli.DATASETS` (directory, simulator stem, sentinel file); producers call
 `ensure_dataset("<key>")`, which simulates only when the sentinel is missing.
 
 ## Adding a domain

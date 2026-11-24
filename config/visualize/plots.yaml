@@ -71,7 +71,7 @@ fit_point_dataset:                         # Settings for plots of fits to point
   fit_image_with_points: true              # The observed image with observed and model positions and critical curves over it (fit_image_with_points.png)?
   subplot_point_solver: true               # PointSolver refinement steps at the best fit (point_solver.png); off by default in the library.
   subplot_fit_combined: true               # Multi-dataset (e.g. cluster) fits: every source's fit in one panel, curves at each source's redshift (fit.png)?
-  fit_per_image_combined: true             # Multi-dataset (e.g. cluster) fits: fit_per_image.png for every source, ranking range shared across sources?
+  fit_per_image_combined: true             # Multi-dataset (e.g. cluster) fits: a family fit in <name>/fit.png for every source?
   fit_image_with_points_combined: true     # Multi-dataset (e.g. cluster) fits: the observed image with every source's positions, model and curves (fit_image_with_points.png)?
 
 weak_dataset:                              # Settings for plots of weak lensing shear catalogues (e.g. PlotterWeak).

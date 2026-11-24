@@ -183,7 +183,8 @@ def render_markdown(manifest: dict, version: str) -> str:
         "",
         "Every figure below is what the PyAutoLens visualizers (`VisualizerImaging`, "
         "`VisualizerInterferometer`, `VisualizerPoint`, `VisualizerWeak`) write to a "
-        "model-fit's `image/` folder, rendered on this repo's datasets with the true model. "
+        "model-fit's `image/` folder, rendered on this repo's datasets from the simulation models. "
+        "For the Simple cluster, the first point source is offset by 0.003 arcsec in y. "
         "See [README.md](README.md) for how to improve one.",
         "",
         "## Contents",

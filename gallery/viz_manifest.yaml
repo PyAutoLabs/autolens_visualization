@@ -20,14 +20,14 @@ figures:
   producer: scripts/cluster/visualization.py
   domain: cluster
   source: ''
-  bytes: 99764
-  sha256: e8978e75b2c2f2571e1da78dfd98d4d1c245b338137799714c30437ac1b7f584
+  bytes: 121660
+  sha256: 67342a4977f85b9894c89f786fa0296c3d795b3f351cd00b435cc661571f3ac9
 - file: scripts/cluster/images/visualization/fit_image_with_points.png
   producer: scripts/cluster/visualization.py
   domain: cluster
   source: ''
-  bytes: 1556876
-  sha256: 8d82badcc8f701060f7be3e3806dd69046cec79ae0c762139167d7c7b529de5b
+  bytes: 278592
+  sha256: c15f74236d553d919c7453581f17dcb8758c7aec3bc0b090b020152e8aa25cbe
 - file: scripts/cluster/images/visualization/image_with_points.png
   producer: scripts/cluster/visualization.py
   domain: cluster

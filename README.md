@@ -35,17 +35,18 @@ mirroring `autolens_workspace` (a variant gets its own folder):
 | `multi_galaxy` | `visualization.py` | `dataset.png` + `fit.png` |
 | `group` | `visualization.py` | `dataset.png` + `fit.png` |
 | `cluster` | `visualization.py` | Combined cluster figures and per-source figures, including `fit.png` (source-plane family fit), `fit_image_plane.png` and `point_solver.png` |
+| `cluster_pandora` | `visualization.py` | Four cluster overviews and seven source-plane family fits on the registered [Abell 2744 HST cutout](dataset/cluster/a2744/README.md) |
 | `multi_dataset` | `visualization.py` | `dataset.png` + `fit.png` per band |
 | `weak` | `visualization.py` | `dataset.png` + `fit.png` |
 
-Each figure is exactly what the visualizers (`VisualizerImaging`, `VisualizerInterferometer`,
+The simulated examples show what the visualizers (`VisualizerImaging`, `VisualizerInterferometer`,
 `VisualizerPoint`, `VisualizerWeak`) write to a fit's `image/` folder. The producers use the
 simulation models and enable the figure settings in
 [`config/visualize/plots.yaml`](config/visualize/plots.yaml). Imaging and
 interferometer render every figure. Other types track a subset, as shown above. The Simple
 cluster model offsets the `point_0` source y coordinate by 0.003 arcsec to demonstrate how a
 small model error affects the individual images. Both family figures use this same model and
-the tracked simulated positions.
+the tracked simulated positions. Pandora uses the measured positions and a fixed starting mass model.
 
 ## Render locally
 

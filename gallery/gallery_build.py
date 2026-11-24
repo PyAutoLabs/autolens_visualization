@@ -181,9 +181,10 @@ def render_markdown(manifest: dict, version: str) -> str:
         "",
         f"{VERSION_LINE_PREFIX} `{version}` · {n_png} figures.",
         "",
-        "Every figure below is what the PyAutoLens visualizers (`VisualizerImaging`, "
+        "Most figures are outputs that the PyAutoLens visualizers (`VisualizerImaging`, "
         "`VisualizerInterferometer`, `VisualizerPoint`, `VisualizerWeak`) write to a "
-        "model-fit's `image/` folder, rendered on this repo's datasets from the simulation models. "
+        "model-fit's `image/` folder. Pandora shows 24 observed images across seven families "
+        "with source-plane diagnostics from a fixed starting model. "
         "For the Simple cluster, the first point source is offset by 0.003 arcsec in y. "
         "See [README.md](README.md) for how to improve one.",
         "",

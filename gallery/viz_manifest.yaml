@@ -8,7 +8,7 @@ rendered_with:
   autogalaxy: 2026.8.17.1
   autoarray: 2026.8.17.1
   autofit: 2026.8.17.1
-figure_count: 86
+figure_count: 97
 figures:
 - file: scripts/cluster/images/visualization/dataset.png
   producer: scripts/cluster/visualization.py
@@ -118,6 +118,72 @@ figures:
   source: point_1
   bytes: 499370
   sha256: 482ad6ee947511074f0573140c502557c615964c4b6651b8c27d9f8a1f2edc76
+- file: scripts/cluster_pandora/images/visualization/dataset.png
+  producer: scripts/cluster_pandora/visualization.py
+  domain: cluster_pandora
+  source: ''
+  bytes: 119265
+  sha256: a968f18229c127fdbd4ef329902229f4a72e8238f9fb1096650b4380eb6f2a08
+- file: scripts/cluster_pandora/images/visualization/fit.png
+  producer: scripts/cluster_pandora/visualization.py
+  domain: cluster_pandora
+  source: ''
+  bytes: 146889
+  sha256: 8dab26c57632d2e7d195ec4327b5841d5a0540f69b1c58b0477a67c46d7ae744
+- file: scripts/cluster_pandora/images/visualization/fit_image_with_points.png
+  producer: scripts/cluster_pandora/visualization.py
+  domain: cluster_pandora
+  source: ''
+  bytes: 430151
+  sha256: 02b798a1c7a5b802b28f008311b48652a16a082471079743cf7881491628a26c
+- file: scripts/cluster_pandora/images/visualization/image_with_points.png
+  producer: scripts/cluster_pandora/visualization.py
+  domain: cluster_pandora
+  source: ''
+  bytes: 417067
+  sha256: f07f4262fd5a5e287190c3ef0e38844b9b9da1c4f8afe919705834e15b884e78
+- file: scripts/cluster_pandora/images/visualization/point_0/fit.png
+  producer: scripts/cluster_pandora/visualization.py
+  domain: cluster_pandora
+  source: point_0
+  bytes: 392436
+  sha256: 3c169d29c6c99d077257bffba3e28e6c75ab79ecb6478b76d26547e84bd3603f
+- file: scripts/cluster_pandora/images/visualization/point_1/fit.png
+  producer: scripts/cluster_pandora/visualization.py
+  domain: cluster_pandora
+  source: point_1
+  bytes: 399625
+  sha256: d06e5903c1fd20cab731a37e53d0b7240d4eddfc685ef53075f3219ceefcd866
+- file: scripts/cluster_pandora/images/visualization/point_2/fit.png
+  producer: scripts/cluster_pandora/visualization.py
+  domain: cluster_pandora
+  source: point_2
+  bytes: 403265
+  sha256: 82523424f55425f5735aad2fd4f496b8fb02fcb370e7233b902abf5c63d51488
+- file: scripts/cluster_pandora/images/visualization/point_3/fit.png
+  producer: scripts/cluster_pandora/visualization.py
+  domain: cluster_pandora
+  source: point_3
+  bytes: 391994
+  sha256: df14c634854dc73c28d416684630b09fee3ec1b2e8383fd888cba7e58b68d0a9
+- file: scripts/cluster_pandora/images/visualization/point_4/fit.png
+  producer: scripts/cluster_pandora/visualization.py
+  domain: cluster_pandora
+  source: point_4
+  bytes: 386673
+  sha256: 2b3d7f05525a092eb062ee4669b5596f3be7aad6de3e2d1e188e8677bb31a48f
+- file: scripts/cluster_pandora/images/visualization/point_5/fit.png
+  producer: scripts/cluster_pandora/visualization.py
+  domain: cluster_pandora
+  source: point_5
+  bytes: 389921
+  sha256: a2a4fa06e29eda0f4b0ba362c58f18faea06cf70f9da6d25434e8841d865cea5
+- file: scripts/cluster_pandora/images/visualization/point_6/fit.png
+  producer: scripts/cluster_pandora/visualization.py
+  domain: cluster_pandora
+  source: point_6
+  bytes: 407758
+  sha256: 80063a59bcfdc802e159d83d21a596e3749b0b51692c6e1f66dfce1adc944583
 - file: scripts/group/images/visualization/dataset.png
   producer: scripts/group/visualization.py
   domain: group

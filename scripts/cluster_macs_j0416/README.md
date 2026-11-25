@@ -1,0 +1,8 @@
+# MACS J0416 family fits
+
+Run `bash gallery/gallery_run.sh cluster_macs_j0416` from the gallery root. On first use the producer downloads the expanded mass model, multiple-image catalogue, residual table and HST F160W mosaic. It verifies their SHA-256 digests before rendering and caches the inputs in `output/macs_j0416_inputs/`. The source URLs and digests are recorded in [inputs.py](inputs.py).
+
+The field contains 237 observed images from 88 knot families. The model holds the 222 published dPIE mass components fixed and solves a source centre for each selected family. The catalogue uses arcsecond offsets increasing west and north from RA 64.038142°, Dec −24.067472°. Each HST cutout is sampled through the mosaic’s sky WCS. [Bergamini et al. (2023)](https://doi.org/10.1051/0004-6361/202244834) · [Published model](https://www.fe.infn.it/astro/lensing/M0416_Bergamini22/) · [Hubble Frontier Fields F160W, epoch 2](https://archive.stsci.edu/pub/hlsp/frontier/macs0416/images/hst/v1.0-epoch2/)
+
+- The three source-plane subplots follow the two images of family 210.4, the three images of 101, and the six images of 14.1. For 210.4 the overview, contribution ranking, 210.4c zoom and all back-traced images are also available individually. Image 210.4c contributes 9.49 of the family’s 11.70 source-plane χ².
+- The two published-offset figures use the image matches and rounded residuals in `chires.dat`. The bars show separations in arcseconds. For family 101, image 101c has a 1.75″ offset and the family RMS is 1.08″. The lower-right panel shows the observed images back-traced by the fixed PyAutoLens model. Family 14.1 uses the same comparison for all six images.

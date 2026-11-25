@@ -36,6 +36,7 @@ mirroring `autolens_workspace` (a variant gets its own folder):
 | `group` | `visualization.py` | `dataset.png` + `fit.png` |
 | `cluster` | `visualization.py` | Combined cluster figures and per-source figures, including `fit.png` (source-plane family fit), `fit_image_plane.png` and `point_solver.png` |
 | `cluster_pandora` | `visualization.py` | Four cluster overviews and seven source-plane family fits on the registered [Abell 2744 HST cutout](dataset/cluster/a2744/README.md) |
+| `cluster_macs_j0416` | `visualization.py` | Nine [MACS J0416 family diagnostics](scripts/cluster_macs_j0416/README.md), including catalogue-labelled source-plane fits and published image-plane offsets |
 | `multi_dataset` | `visualization.py` | `dataset.png` + `fit.png` per band |
 | `weak` | `visualization.py` | `dataset.png` + `fit.png` |
 

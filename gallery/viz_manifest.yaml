@@ -2,13 +2,13 @@
 # the PyAutoEyes dashboard. Do not edit by hand: rerun
 # `bash gallery/gallery_run.sh --all` (or `python gallery/gallery_build.py`).
 schema: 1
-generated: '2026-11-24'
+generated: '2026-11-25'
 rendered_with:
   autolens: 2026.8.17.1
   autogalaxy: 2026.8.17.1
   autoarray: 2026.8.17.1
   autofit: 2026.8.17.1
-figure_count: 97
+figure_count: 106
 figures:
 - file: scripts/cluster/images/visualization/dataset.png
   producer: scripts/cluster/visualization.py
@@ -118,6 +118,60 @@ figures:
   source: point_1
   bytes: 499370
   sha256: 482ad6ee947511074f0573140c502557c615964c4b6651b8c27d9f8a1f2edc76
+- file: scripts/cluster_macs_j0416/images/visualization/210.4c_zoom.png
+  producer: scripts/cluster_macs_j0416/visualization.py
+  domain: cluster_macs_j0416
+  source: ''
+  bytes: 35145
+  sha256: e7d541f87ae5dd576bef4c376f3aacfbbef9dae9a3cbda92f2716ae900f4f36e
+- file: scripts/cluster_macs_j0416/images/visualization/all_back_traced_images.png
+  producer: scripts/cluster_macs_j0416/visualization.py
+  domain: cluster_macs_j0416
+  source: ''
+  bytes: 28212
+  sha256: 54ea940b55b2757441377b8a53f3da11cd91a0ce6b9906d8f32188ac2244cbfc
+- file: scripts/cluster_macs_j0416/images/visualization/overview.png
+  producer: scripts/cluster_macs_j0416/visualization.py
+  domain: cluster_macs_j0416
+  source: ''
+  bytes: 383908
+  sha256: 2a4ca482bff330f617764781da829ce4bf351b68b7b27614ffd95c98d6f58def
+- file: scripts/cluster_macs_j0416/images/visualization/published_101.png
+  producer: scripts/cluster_macs_j0416/visualization.py
+  domain: cluster_macs_j0416
+  source: ''
+  bytes: 368352
+  sha256: e6aa1a688132b34d95417e23102af8c563cf2e72ea67435f2e1e5b50ae651011
+- file: scripts/cluster_macs_j0416/images/visualization/published_14.1.png
+  producer: scripts/cluster_macs_j0416/visualization.py
+  domain: cluster_macs_j0416
+  source: ''
+  bytes: 422099
+  sha256: 48f5510b1d14041e4ef2e036492d58eb6f527c59cb2c0fe56dab8c65e72d11a3
+- file: scripts/cluster_macs_j0416/images/visualization/ranking.png
+  producer: scripts/cluster_macs_j0416/visualization.py
+  domain: cluster_macs_j0416
+  source: ''
+  bytes: 23285
+  sha256: 6565c51e7a54552c8937f44f67f65e69e1c2e1e17853c2e9bda5aecffd453c45
+- file: scripts/cluster_macs_j0416/images/visualization/source_101.png
+  producer: scripts/cluster_macs_j0416/visualization.py
+  domain: cluster_macs_j0416
+  source: ''
+  bytes: 331982
+  sha256: 454049bc4e2f3a3dece25ccaf13fc24c5b5161ffa458a08ff58661335acf5ef7
+- file: scripts/cluster_macs_j0416/images/visualization/source_14.1.png
+  producer: scripts/cluster_macs_j0416/visualization.py
+  domain: cluster_macs_j0416
+  source: ''
+  bytes: 448924
+  sha256: dfa644d221ddbd0f8a7606813dd06ed7ccc5aa2a39ee3bd8f6403f0be67fbc55
+- file: scripts/cluster_macs_j0416/images/visualization/source_210.4.png
+  producer: scripts/cluster_macs_j0416/visualization.py
+  domain: cluster_macs_j0416
+  source: ''
+  bytes: 319794
+  sha256: 0ef32202e8f9b0d73b249771195cd683e0b4c07a0d4cc33b8f9dc490c8d3b5d5
 - file: scripts/cluster_pandora/images/visualization/dataset.png
   producer: scripts/cluster_pandora/visualization.py
   domain: cluster_pandora
